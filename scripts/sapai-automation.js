@@ -312,6 +312,269 @@ async function injectPromptText(text) {
     }
 }
 
+// Função para selecionar modelo automaticamente
+async function selectModel(modelName = 'Mistral Large Instruct (2407)') {
+    try {
+        console.log(`Iniciando seleção automática do modelo: ${modelName}`);
+        
+        // Função auxiliar para encontrar elementos por texto
+        const findElementByText = (selector, text) => {
+            const elements = document.querySelectorAll(selector);
+            for (const element of elements) {
+                if (element.textContent && element.textContent.includes(text)) {
+                    return element;
+                }
+            }
+            return null;
+        };
+        
+        // Primeiro, tentar encontrar o botão inicial para trocar modelo
+        const modelNameSelectors = [
+            '#__xmlview1--modelName-inner',
+            '[id*="modelName-inner"]',
+            'span[dir="auto"]'
+        ];
+        
+        let modelNameButton = null;
+        for (const selector of modelNameSelectors) {
+            try {
+                console.log(`Tentando encontrar botão de nome do modelo com seletor: ${selector}`);
+                modelNameButton = document.querySelector(selector);
+                if (modelNameButton) {
+                    console.log(`Botão de nome do modelo encontrado com seletor: ${selector}`);
+                    break;
+                }
+            } catch (e) {
+                console.log(`Seletor ${selector} não encontrou o botão de nome do modelo`);
+            }
+        }
+        
+        // Se não encontrou pelos seletores diretos, tentar buscar por texto
+        if (!modelNameButton) {
+            console.log('Tentando encontrar botão de nome do modelo por texto...');
+            modelNameButton = findElementByText('span', 'Mistral') || findElementByText('span', 'Large') || findElementByText('span', modelName);
+            if (modelNameButton) {
+                console.log('Botão de nome do modelo encontrado por texto');
+            }
+        }
+        
+        if (!modelNameButton) {
+            console.log('Botão de nome do modelo não encontrado, tentando encontrar botão de configurações...');
+        }
+        
+        // Tentar encontrar o botão de configurações/settings
+        const settingsButtonSelectors = [
+            '#__xmlview1--settingsButton-inner',
+            '[id*="settingsButton-inner"]',
+            'span.sapMBtnInner.sapMBtnHoverable.sapMFocusable.sapMBtnIconFirst.sapMBtnTransparent',
+            'span:has(span[data-sap-ui-icon-content])',
+            'button[aria-label*="settings"]',
+            'button[aria-label*="configurações"]',
+            'span.sapMBtnInner:has(.sapUiIcon)',
+            '.sapMBtnInner.sapMBtnTransparent'
+        ];
+        
+        let settingsButton = null;
+        for (const selector of settingsButtonSelectors) {
+            try {
+                console.log(`Tentando encontrar botão de configurações com seletor: ${selector}`);
+                settingsButton = document.querySelector(selector);
+                if (settingsButton) {
+                    console.log(`Botão de configurações encontrado com seletor: ${selector}`);
+                    break;
+                }
+            } catch (e) {
+                console.log(`Seletor ${selector} não encontrou o botão de configurações`);
+            }
+        }
+        
+        // Se encontrou o botão de nome do modelo, clicar nele primeiro
+        if (modelNameButton) {
+            console.log('Clicando no botão de nome do modelo...');
+            modelNameButton.click();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        // Se encontrou o botão de configurações, clicar nele
+        if (settingsButton) {
+            console.log('Clicando no botão de configurações...');
+            settingsButton.click();
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Aguardar mais tempo para o menu abrir
+        } else {
+            throw new Error('Botão de configurações não encontrado');
+        }
+        
+        // Aguardar o menu de seleção de modelo aparecer
+        console.log('Aguardando menu de seleção de modelo carregar...');
+        
+        // Aguardar um pouco mais para o menu carregar
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // Tentar encontrar todos os modelos disponíveis com seletores mais amplos
+        const modelSelectors = [
+            'div[id*="llmGridList"]',
+            'div[class*="FlexBox"]', 
+            'div[data-sap-ui*="CatalogUi"]',
+            '.sapMFlexBox',
+            '.sapUiFlexBox',
+            'div[role="option"]',
+            'div[role="listitem"]',
+            '.sapMListItem',
+            'div[class*="Item"]',
+            'div[class*="Card"]'
+        ];
+        
+        let allModels = [];
+        for (const selector of modelSelectors) {
+            const elements = document.querySelectorAll(selector);
+            allModels = [...allModels, ...elements];
+        }
+        
+        console.log(`Encontrados ${allModels.length} possíveis elementos de modelo`);
+        
+        let modelSelected = false;
+        
+        // Procurar pelo modelo específico
+        for (const modelElement of allModels) {
+            const textContent = modelElement.textContent || modelElement.innerText || '';
+            console.log(`Verificando elemento com texto: ${textContent.substring(0, 100)}...`);
+            
+            // Verificar se o texto contém o nome do modelo (busca mais flexível)
+            const modelWords = modelName.split(' ');
+            const containsAllWords = modelWords.every(word => 
+                textContent.toLowerCase().includes(word.toLowerCase())
+            );
+            
+            if (containsAllWords || textContent.includes(modelName)) {
+                console.log(`✅ Modelo encontrado! Clicando no elemento...`);
+                console.log(`Texto do elemento: ${textContent}`);
+                modelElement.click();
+                modelSelected = true;
+                break;
+            }
+        }
+        
+        if (!modelSelected) {
+            console.log('⚠️ Modelo não encontrado nos elementos principais, tentando busca alternativa...');
+            
+            // Tentar uma abordagem mais agressiva - procurar por qualquer elemento clicável que contenha o nome do modelo
+            const clickableSelectors = [
+                'div[role="button"]',
+                'div[tabindex]',
+                'span[role="button"]',
+                'button',
+                'a',
+                '.sapMBtn',
+                '.sapUiBtn',
+                '[onclick]',
+                '[data-sap-ui]'
+            ];
+            
+            let allClickableElements = [];
+            for (const selector of clickableSelectors) {
+                const elements = document.querySelectorAll(selector);
+                allClickableElements = [...allClickableElements, ...elements];
+            }
+            
+            console.log(`Procurando em ${allClickableElements.length} elementos clicáveis...`);
+            
+            for (const element of allClickableElements) {
+                const textContent = element.textContent || element.innerText || '';
+                
+                // Verificar se o elemento está visível e contém o modelo
+                if (element.offsetParent !== null && textContent.trim()) {
+                    const modelWords = modelName.split(' ');
+                    const containsAllWords = modelWords.every(word => 
+                        textContent.toLowerCase().includes(word.toLowerCase())
+                    );
+                    
+                    if (containsAllWords || textContent.includes(modelName)) {
+                        console.log(`✅ Modelo encontrado em elemento clicável alternativo!`);
+                        console.log(`Elemento:`, element.tagName, element.className);
+                        console.log(`Texto: ${textContent.substring(0, 100)}...`);
+                        element.click();
+                        modelSelected = true;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (modelSelected) {
+            console.log(`Modelo ${modelName} selecionado com sucesso!`);
+            // Aguardar um pouco para a seleção ser processada
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Tentar encontrar e clicar em um botão de confirmação/aplicar
+            const confirmButtonSelectors = [
+                'button.sapMBtn[type="Emphasized"]',
+                'button.sapMBtnEmphasized',
+                'span.sapMBtnInner',
+                'button.sapMBtn'
+            ];
+            
+            let confirmButtonFound = false;
+            
+            // Primeiro tentar pelos seletores diretos
+            for (const selector of confirmButtonSelectors) {
+                try {
+                    const confirmButton = document.querySelector(selector);
+                    if (confirmButton) {
+                        console.log(`Botão de confirmação encontrado com seletor: ${selector}`);
+                        confirmButton.click();
+                        confirmButtonFound = true;
+                        break;
+                    }
+                } catch (e) {
+                    console.log(`Erro ao tentar clicar no botão de confirmação: ${e}`);
+                }
+            }
+            
+            // Se não encontrou, tentar buscar por texto
+            if (!confirmButtonFound) {
+                const confirmTexts = ['Aplicar', 'Apply', 'OK', 'Confirmar', 'Save', 'Salvar'];
+                for (const text of confirmTexts) {
+                    const confirmButton = findElementByText('button', text) || findElementByText('span', text);
+                    if (confirmButton) {
+                        console.log(`Botão de confirmação encontrado por texto: ${text}`);
+                        // Se for um span, tentar clicar no botão pai
+                        const buttonToClick = confirmButton.tagName === 'SPAN' ? confirmButton.closest('button') || confirmButton : confirmButton;
+                        buttonToClick.click();
+                        confirmButtonFound = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            console.warn(`❌ Modelo ${modelName} não encontrado na lista de modelos disponíveis`);
+            
+            // Diagnóstico: listar todos os elementos com texto para debug
+            console.log('=== DIAGNÓSTICO: Elementos disponíveis ===');
+            const allElements = document.querySelectorAll('*');
+            const elementsWithText = [];
+            
+            for (const element of allElements) {
+                const text = element.textContent || element.innerText || '';
+                if (text.trim() && text.length > 5 && text.length < 200) {
+                    elementsWithText.push({
+                        tag: element.tagName,
+                        class: element.className,
+                        id: element.id,
+                        text: text.trim().substring(0, 100)
+                    });
+                }
+            }
+            
+            console.log('Elementos com texto encontrados:', elementsWithText.slice(0, 20)); // Mostrar apenas os primeiros 20
+            console.log('=== FIM DO DIAGNÓSTICO ===');
+        }
+        
+    } catch (error) {
+        console.error('Erro ao selecionar modelo:', error);
+        throw error;
+    }
+}
+
 // Função para fazer upload do arquivo de knowledge base
 async function uploadKnowledgeBaseFile(promptId) {
     try {
@@ -636,8 +899,51 @@ async function automatePromptUsage(promptId) {
             id: prompt.id,
             title: prompt.title,
             textLength: prompt.text.length,
+            model: prompt.model,
             hasFiles: prompt.knowledgeBaseFiles && prompt.knowledgeBaseFiles.length > 0
         });
+        
+        console.log('Modelo específico do prompt:', prompt.model || 'não definido');
+        
+        // Obter configurações para modelo padrão
+        const config = await new Promise(resolve => {
+            chrome.storage.local.get(['config'], (result) => {
+                resolve(result.config || {});
+            });
+        });
+        
+        // Determinar qual modelo usar: específico do prompt > padrão das configurações > Mistral Large Instruct (2407)
+        let modelToUse = 'Mistral Large Instruct (2407)'; // fallback padrão
+        
+        console.log('=== ANÁLISE DE SELEÇÃO DE MODELO ===');
+        console.log('Modelo do prompt:', prompt?.model || 'não definido');
+        console.log('Modelo padrão das configurações:', config.defaultModel || 'não definido');
+        console.log('Modelo fallback:', modelToUse);
+        
+        if (prompt && prompt.model) {
+            modelToUse = prompt.model;
+            console.log('✅ USANDO modelo específico do prompt:', modelToUse);
+        } else if (config.defaultModel) {
+            modelToUse = config.defaultModel;
+            console.log('✅ USANDO modelo padrão das configurações:', modelToUse);
+        } else {
+            console.log('✅ USANDO modelo padrão fallback:', modelToUse);
+        }
+        
+        console.log('=== MODELO FINAL SELECIONADO:', modelToUse, '===');
+        
+        // Tentar selecionar o modelo automaticamente
+        try {
+            console.log(`Tentando selecionar modelo: ${modelToUse}`);
+            await selectModel(modelToUse);
+            console.log('Modelo selecionado com sucesso');
+        } catch (modelError) {
+            console.warn('Erro ao selecionar modelo, continuando com o modelo atual:', modelError);
+            // Não interromper o processo se a seleção do modelo falhar
+        }
+        
+        // Aguardar um pouco após a seleção do modelo
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Tentar detectar o seletor correto antes de injetar o texto
         console.log('Tentando detectar o seletor correto...');

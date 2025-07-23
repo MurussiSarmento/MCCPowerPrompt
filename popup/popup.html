@@ -60,6 +60,19 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="promptModel">Modelo Específico (opcional):</label>
+                    <select id="promptModel" name="promptModel">
+                        <option value="">Usar modelo padrão das configurações</option>
+                        <option value="Mistral Large Instruct (2407)">Mistral Large Instruct (2407)</option>
+                        <option value="GPT-4">GPT-4</option>
+                        <option value="GPT-3.5 Turbo">GPT-3.5 Turbo</option>
+                        <option value="Claude">Claude</option>
+                        <option value="Gemini">Gemini</option>
+                    </select>
+                    <div class="form-help">Modelo específico para este prompt. Se não selecionado, usará o modelo padrão das configurações.</div>
+                </div>
+                
+                <div class="form-group">
                     <label for="knowledgeBaseFiles">Arquivos de Knowledge Base:</label>
                     <input type="file" id="knowledgeBaseFiles" name="knowledgeBaseFiles" multiple accept=".txt,.md,.csv,.json,.xml,.html,.htm,.css,.js,.py,.java,.c,.cpp,.h,.php,.rb,.pl,.sql,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.svg">
                     <div class="form-help">Selecione arquivos para anexar ao prompt. Estes arquivos serão exportados junto com os prompts.</div>
@@ -89,11 +102,61 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="defaultModel">Modelo Padrão:</label>
+                    <select id="defaultModel" name="defaultModel">
+                        <option value="Mistral Large Instruct (2407)">Mistral Large Instruct (2407)</option>
+                        <option value="GPT-4">GPT-4</option>
+                        <option value="GPT-3.5 Turbo">GPT-3.5 Turbo</option>
+                        <option value="Claude">Claude</option>
+                        <option value="Gemini">Gemini</option>
+                    </select>
+                    <div class="form-help">Modelo que será selecionado automaticamente ao usar prompts</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="language">Idioma:</label>
+                    <select id="language" name="language">
+                        <option value="pt_BR">Português (Brasil)</option>
+                        <option value="en">English (US)</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                    </select>
+                    <div class="form-help">Selecione o idioma da interface da extensão</div>
+                </div>
+                
+                <div class="form-group">
                     <label for="storageType">Tipo de Armazenamento:</label>
                     <select id="storageType" name="storageType">
                         <option value="local">Armazenamento Local (Chrome)</option>
                     </select>
                     <div class="form-help">Os prompts serão salvos no armazenamento local do navegador. Use as funções de exportar/importar para fazer backup.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Botões Visíveis:</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="showCopyPrompt" name="visibleButtons" value="copyPrompt" checked>
+                            <span>Copiar Prompt</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="showCopyAhk" name="visibleButtons" value="copyAhk">
+                            <span>Copiar URL AHK</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="showAutomateSap" name="visibleButtons" value="automateSap">
+                            <span>Automatizar no SAP</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="showEdit" name="visibleButtons" value="edit">
+                            <span>Editar</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="showDelete" name="visibleButtons" value="delete">
+                            <span>Excluir</span>
+                        </label>
+                    </div>
+                    <div class="form-help">Escolha quais botões aparecerão em cada prompt</div>
                 </div>
                 
                 <div class="form-group">
@@ -115,6 +178,7 @@
     </div>
 
     <script src="jszip.min.js"></script>
+    <script src="../debug_simple.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>

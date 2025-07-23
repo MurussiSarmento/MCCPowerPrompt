@@ -2,7 +2,8 @@
   "manifest_version": 3,
   "name": "mcc PromptFlow",
   "version": "1.0",
-  "description": "Repositório de prompts com integração AHK.",
+  "description": "__MSG_extension_description__",
+  "default_locale": "pt_BR",
   "permissions": ["storage", "activeTab", "scripting", "downloads"],
   "host_permissions": [
     "https://chat.openai.com/*",
@@ -44,5 +45,16 @@
       "https://claude.ai/*",
       "https://sapit-core-playground-vole.ai-launchpad.prod.eu-central-1.aws.apps.ml.hana.ondemand.com/*"
     ]
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "_locales/pt_BR/messages.json",
+        "_locales/en/messages.json",
+        "_locales/es/messages.json", 
+        "_locales/fr/messages.json"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

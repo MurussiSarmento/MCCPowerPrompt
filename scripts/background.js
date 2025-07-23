@@ -1,9 +1,102 @@
 // Background script - Service Worker para Manifest V3
 // Este é o orquestrador principal da extensão
 
+// ===============================
+// Sistema de Internacionalização
+// ===============================
+
+/**
+ * Obtém o idioma atual do usuário
+ * Prioridade: 1. Configuração salva, 2. Idioma do navegador, 3. Padrão (pt-BR)
+ */
+async function getCurrentLanguage() {
+    try {
+        const result = await chrome.storage.local.get(['language']);
+        if (result.language) {
+            return result.language;
+        }
+        
+        // Se não há configuração salva, detectar idioma do navegador
+        const browserLang = chrome.i18n.getUILanguage();
+        
+        // Mapear idiomas suportados (usando formato de diretório)
+        const supportedLanguages = ['pt_BR', 'en', 'es', 'fr'];
+        
+        // Tentar encontrar correspondência exata
+        if (supportedLanguages.includes(browserLang)) {
+            return browserLang;
+        }
+        
+        // Tentar encontrar correspondência por código de idioma (ex: en-US -> en)
+        const langCode = browserLang.split('-')[0];
+        
+        // Mapeamento especial para português
+        if (langCode === 'pt') {
+            return 'pt_BR';
+        }
+        
+        const mappedLang = supportedLanguages.find(lang => lang.startsWith(langCode));
+        
+        if (mappedLang) {
+            return mappedLang;
+        }
+        
+        // Padrão para português brasileiro
+        return 'pt_BR';
+    } catch (error) {
+        console.error('Erro ao detectar idioma:', error);
+        return 'pt_BR';
+    }
+}
+
+/**
+ * Define o idioma da extensão
+ */
+async function setLanguage(language) {
+    try {
+        await chrome.storage.local.set({ language: language });
+        console.log('Idioma definido para:', language);
+        
+        // Notificar todas as abas abertas sobre mudança de idioma
+        const tabs = await chrome.tabs.query({});
+        tabs.forEach(tab => {
+            try {
+                chrome.tabs.sendMessage(tab.id, {
+                    action: 'languageChanged',
+                    language: language
+                });
+            } catch (error) {
+                // Ignora erros para abas que não têm content script
+            }
+        });
+        
+        return true;
+    } catch (error) {
+        console.error('Erro ao definir idioma:', error);
+        return false;
+    }
+}
+
+/**
+ * Função auxiliar para obter mensagem traduzida com fallback
+ */
+function getI18nMessage(key, substitutions = null) {
+    try {
+        const message = chrome.i18n.getMessage(key, substitutions);
+        return message || key; // Retorna a chave se não encontrar tradução
+    } catch (error) {
+        console.error('Erro ao obter mensagem i18n:', key, error);
+        return key;
+    }
+}
+
 // Listener para mensagens do popup ou content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('Background recebeu mensagem:', message);
+    try {
+        console.log(getI18nMessage('background_received_message'), message);
+    } catch (error) {
+        console.log('Background recebeu mensagem:', message);
+    }
     
     switch (message.action) {
         case 'injectFromExternal':
@@ -15,27 +108,43 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             break;
             
         case 'configUpdated':
-            console.log('Configurações atualizadas, recarregando URLs suportadas');
+            console.log(getI18nMessage('config_updated_reloading_urls'));
             // Recarregar as URLs suportadas
             getConfiguredUrls().then(urls => {
-                console.log('URLs suportadas atualizadas:', urls);
+                console.log(getI18nMessage('supported_urls_updated'), urls);
             });
             break;
             
         case 'requestFileSystemPermission':
             // A permissão fileSystem não é permitida para extensões, apenas para aplicativos empacotados
             // Informar que a API File System Access será usada sem permissão específica
-            console.log('A API File System Access será usada sem permissão específica');
-            sendResponse({ success: true, message: 'A API File System Access não requer permissão específica em extensões' });
+            console.log(getI18nMessage('filesystem_api_no_permission'));
+            sendResponse({ success: true, message: getI18nMessage('filesystem_api_no_permission_needed') });
             break;
             
         case 'automatePrompt':
             handleAutomatePrompt(message.promptId, sendResponse);
             break;
             
+        case 'getCurrentLanguage':
+            getCurrentLanguage().then(language => {
+                sendResponse({ success: true, language: language });
+            }).catch(error => {
+                sendResponse({ success: false, error: error.message });
+            });
+            break;
+            
+        case 'setLanguage':
+            setLanguage(message.language).then(success => {
+                sendResponse({ success: success });
+            }).catch(error => {
+                sendResponse({ success: false, error: error.message });
+            });
+            break;
+            
         default:
-            console.warn('Ação não reconhecida:', message.action);
-            sendResponse({ success: false, error: 'Ação não reconhecida' });
+            console.warn(getI18nMessage('unrecognized_action'), message.action);
+            sendResponse({ success: false, error: getI18nMessage('unrecognized_action') });
     }
     
     return true; // Indica resposta assíncrona
@@ -67,17 +176,17 @@ chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => 
  */
 async function handleAutomatePrompt(promptId, sendResponse) {
     try {
-        console.log('Iniciando automação para prompt:', promptId);
+        console.log(getI18nMessage('starting_automation_for_prompt'), promptId);
         
         // 1. Buscar prompt no storage
         const prompt = await getPromptFromStorage(promptId);
         if (!prompt) {
-            console.error('Prompt não encontrado:', promptId);
-            if (sendResponse) sendResponse({ success: false, error: 'Prompt não encontrado' });
+            console.error(getI18nMessage('prompt_not_found_error'), promptId);
+            if (sendResponse) sendResponse({ success: false, error: getI18nMessage('prompt_not_found') });
             return;
         }
         
-        console.log('Prompt encontrado:', prompt.title);
+        console.log(getI18nMessage('prompt_found'), prompt.title);
         
         // 2. Verificar se já existe uma aba com o SAP Generative AI aberta
         const result = await chrome.storage.local.get(['config']);
@@ -209,12 +318,12 @@ async function handleProtocolInjection(promptId, sendResponse) {
         // 1. Buscar prompt no storage
         const prompt = await getPromptFromStorage(promptId);
         if (!prompt) {
-            console.error('Prompt não encontrado:', promptId);
-            if (sendResponse) sendResponse({ success: false, error: 'Prompt não encontrado' });
+            console.error(getI18nMessage('prompt_not_found_error'), promptId);
+            if (sendResponse) sendResponse({ success: false, error: getI18nMessage('prompt_not_found') });
             return;
         }
         
-        console.log('Prompt encontrado:', prompt.title);
+        console.log(getI18nMessage('prompt_found'), prompt.title);
         
         // 2. Encontrar aba ativa compatível
         const targetTab = await findCompatibleActiveTab();

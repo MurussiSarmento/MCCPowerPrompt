@@ -1,0 +1,170 @@
+{
+  "extension_description": {
+    "message": "Repositorio de prompts con integración AHK."
+  },
+  "html_lang": {
+    "message": "es-ES"
+  },
+  "search_placeholder": {
+    "message": "Buscar prompts..."
+  },
+  "add_new_button": {
+    "message": "Agregar Nuevo"
+  },
+  "settings_button_title": {
+    "message": "Configuración"
+  },
+  "prompts_list_comment": {
+    "message": "La lista de prompts se renderizará aquí"
+  },
+  "add_prompt_modal_title": {
+    "message": "Agregar Prompt"
+  },
+  "edit_prompt_modal_title": {
+    "message": "Editar Prompt"
+  },
+  "title_label": {
+    "message": "Título:"
+  },
+  "text_label": {
+    "message": "Texto:"
+  },
+  "prompt_text_placeholder": {
+    "message": "Ingrese su prompt aquí. Use {{variable}} para crear variables dinámicas."
+  },
+  "tags_label": {
+    "message": "Etiquetas:"
+  },
+  "tags_placeholder": {
+    "message": "etiqueta1, etiqueta2, etiqueta3"
+  },
+  "category_label": {
+    "message": "Categoría:"
+  },
+  "category_placeholder": {
+    "message": "Ej: Desarrollo, Marketing, etc."
+  },
+  "specific_model_label": {
+    "message": "Modelo Específico (opcional):"
+  },
+  "use_default_model_option": {
+    "message": "Usar modelo predeterminado de configuración"
+  },
+  "specific_model_help": {
+    "message": "Modelo específico para este prompt. Si no se selecciona, usará el modelo predeterminado de configuración."
+  },
+  "knowledge_base_files_label": {
+    "message": "Archivos de Base de Conocimiento:"
+  },
+  "knowledge_base_files_help": {
+    "message": "Seleccione archivos para adjuntar al prompt. Estos archivos se exportarán junto con los prompts."
+  },
+  "cancel_button": {
+    "message": "Cancelar"
+  },
+  "save_button": {
+    "message": "Guardar"
+  },
+  "settings_modal_title": {
+    "message": "Configuración"
+  },
+  "sap_genai_url_label": {
+    "message": "URL de SAP Generative AI:"
+  },
+  "sap_genai_url_help": {
+    "message": "URL de la plataforma SAP Generative AI para inyección de prompts"
+  },
+  "default_model_label": {
+    "message": "Modelo Predeterminado:"
+  },
+  "default_model_help": {
+    "message": "Modelo que se seleccionará automáticamente al usar prompts"
+  },
+  "storage_type_label": {
+    "message": "Tipo de Almacenamiento:"
+  },
+  "local_storage_option": {
+    "message": "Almacenamiento Local (Chrome)"
+  },
+  "storage_type_help": {
+    "message": "Los prompts se guardarán en el almacenamiento local del navegador. Use las funciones de exportar/importar para hacer respaldos."
+  },
+  "backup_restore_label": {
+    "message": "Respaldo y Restauración:"
+  },
+  "export_prompts_button": {
+    "message": "Exportar Prompts"
+  },
+  "import_prompts_button": {
+    "message": "Importar Prompts"
+  },
+  "backup_restore_help": {
+    "message": "Haga respaldo o restaure sus prompts a través de archivo JSON"
+  },
+  "reset_default_button": {
+    "message": "Restaurar Predeterminado"
+  },
+  "language_label": {
+    "message": "Idioma:"
+  },
+  "language_help": {
+    "message": "Seleccione el idioma de la interfaz de la extensión"
+  },
+  "language_portuguese": {
+    "message": "Português (Brasil)"
+  },
+  "language_english": {
+    "message": "English (US)"
+  },
+  "language_spanish": {
+    "message": "Español"
+  },
+  "language_french": {
+    "message": "Français"
+  },
+  "error_loading_prompts": {
+    "message": "Error al cargar prompts:"
+  },
+  "no_prompts_found_title": {
+    "message": "No se encontraron prompts"
+  },
+  "try_adjust_search": {
+    "message": "Intente ajustar su búsqueda"
+  },
+  "start_adding_first_prompt": {
+    "message": "Comience agregando su primer prompt"
+  },
+  "copy_ahk_url_title": {
+    "message": "Copiar URL AHK"
+  },
+  "automate_sap_genai_title": {
+    "message": "Automatizar en SAP Generative AI"
+  },
+  "edit_title": {
+    "message": "Editar"
+  },
+  "delete_title": {
+    "message": "Eliminar"
+  },
+  "config_restored_alert": {
+    "message": "¡Configuración restaurada a valores predeterminados!"
+  },
+  "config_saved_success": {
+    "message": "¡Configuración guardada exitosamente!"
+  },
+  "error_saving_config_alert": {
+    "message": "Error al guardar configuración: "
+  },
+  "title_text_required": {
+    "message": "¡Título y texto son obligatorios!"
+  },
+  "confirm_delete_prompt": {
+    "message": "¿Está seguro de que desea eliminar este prompt?"
+  },
+  "copied_feedback": {
+    "message": "✅ ¡Copiado!"
+  },
+  "started_feedback": {
+    "message": "✅ ¡Iniciado!"
+  }
+}

@@ -1,3 +1,354 @@
+// ===============================
+// Sistema de Internacionalização
+// ===============================
+
+// Traduções locais (fallback para when chrome.i18n não funciona dinamicamente)
+let currentTranslations = {};
+
+/**
+ * Carrega traduções do arquivo JSON correspondente ao idioma
+ */
+async function loadTranslations(language) {
+    try {
+        const url = chrome.runtime.getURL(`_locales/${language}/messages.json`);
+        console.log('Carregando traduções de:', url);
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        // Converter formato Chrome para formato simples
+        currentTranslations = {};
+        for (const [key, value] of Object.entries(data)) {
+            if (value && value.message) {
+                currentTranslations[key] = value.message;
+            }
+        }
+        
+        console.log('Traduções carregadas:', Object.keys(currentTranslations).length, 'chaves');
+        return currentTranslations;
+    } catch (error) {
+        console.error('Erro ao carregar traduções:', error);
+        // Fallback para chrome.i18n se disponível
+        try {
+            // Tentar usar chrome.i18n como backup
+            currentTranslations = {};
+            return null;
+        } catch (fallbackError) {
+            console.error('Erro no fallback:', fallbackError);
+            return null;
+        }
+    }
+}
+
+/**
+ * Função auxiliar para obter mensagens traduzidas
+ */
+function i18n(key, substitutions = null) {
+    try {
+        // Primeiro tenta usar traduções locais carregadas
+        if (currentTranslations && currentTranslations[key]) {
+            let message = currentTranslations[key];
+            
+            // Processar substitutions se existirem
+            if (substitutions && Array.isArray(substitutions)) {
+                substitutions.forEach((sub, index) => {
+                    message = message.replace(`$${index + 1}`, sub);
+                });
+            }
+            
+            return message;
+        }
+        
+        // Fallback para chrome.i18n
+        if (chrome && chrome.i18n && chrome.i18n.getMessage) {
+            const message = chrome.i18n.getMessage(key, substitutions);
+            if (message) return message;
+        }
+        
+        // Último fallback: strings hardcoded em português para casos críticos
+        const hardcodedFallbacks = {
+            'search_placeholder': 'Buscar prompts...',
+            'add_new_button': 'Adicionar Novo',
+            'settings_button_title': 'Configurações',
+            'cancel_button': 'Cancelar',
+            'save_button': 'Salvar',
+            'no_prompts_found_title': 'Nenhum prompt encontrado',
+            'try_adjust_search': 'Tente ajustar sua busca',
+            'start_adding_first_prompt': 'Comece adicionando seu primeiro prompt'
+        };
+        
+        return hardcodedFallbacks[key] || key;
+    } catch (error) {
+        console.error('Erro ao obter mensagem i18n:', key, error);
+        return key;
+    }
+}
+
+/**
+ * Atualiza a interface do usuário com as traduções
+ */
+function updateUI() {
+    // Atualizar placeholders
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.placeholder = i18n('search_placeholder');
+    
+    const promptText = document.getElementById('promptText');
+    if (promptText) promptText.placeholder = i18n('prompt_text_placeholder');
+    
+    const promptTags = document.getElementById('promptTags');
+    if (promptTags) promptTags.placeholder = i18n('tags_placeholder');
+    
+    const promptCategory = document.getElementById('promptCategory');
+    if (promptCategory) promptCategory.placeholder = i18n('category_placeholder');
+    
+    // Atualizar textos dos botões
+    const addNewBtn = document.getElementById('addNewBtn');
+    if (addNewBtn) addNewBtn.textContent = i18n('add_new_button');
+    
+    const configBtn = document.getElementById('configBtn');
+    if (configBtn) configBtn.title = i18n('settings_button_title');
+    
+    const cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) cancelBtn.textContent = i18n('cancel_button');
+    
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) saveBtn.textContent = i18n('save_button');
+    
+    const resetConfigBtn = document.getElementById('resetConfigBtn');
+    if (resetConfigBtn) resetConfigBtn.textContent = i18n('reset_default_button');
+    
+    const exportPromptsBtn = document.getElementById('exportPromptsBtn');
+    if (exportPromptsBtn) exportPromptsBtn.textContent = i18n('export_prompts_button');
+    
+    const importPromptsBtn = document.getElementById('importPromptsBtn');
+    if (importPromptsBtn) importPromptsBtn.textContent = i18n('import_prompts_button');
+    
+    // Atualizar labels
+    const labels = {
+        'promptTitle': 'title_label',
+        'promptText': 'text_label',
+        'promptTags': 'tags_label',
+        'promptCategory': 'category_label',
+        'promptModel': 'specific_model_label',
+        'knowledgeBaseFiles': 'knowledge_base_files_label',
+        'sapGenAiUrl': 'sap_genai_url_label',
+        'defaultModel': 'default_model_label',
+        'language': 'language_label',
+        'storageType': 'storage_type_label'
+    };
+    
+    Object.entries(labels).forEach(([inputId, messageKey]) => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            const label = document.querySelector(`label[for="${inputId}"]`);
+            if (label) {
+                label.textContent = i18n(messageKey);
+            }
+        }
+    });
+    
+    // Atualizar títulos dos modais
+    const configModalTitle = document.querySelector('#configModal .modal-header h2');
+    if (configModalTitle) configModalTitle.textContent = i18n('settings_modal_title');
+    
+    // Forçar atualização do título do modal de prompt (se estiver aberto)
+    const promptModalTitle = document.querySelector('#promptModal .modal-header h2');
+    if (promptModalTitle && !promptModal.classList.contains('hidden')) {
+        if (editingPromptId) {
+            promptModalTitle.textContent = i18n('edit_prompt_modal_title');
+        } else {
+            promptModalTitle.textContent = i18n('add_prompt_modal_title');
+        }
+    }
+    
+    // Atualizar help texts
+    const helpTexts = document.querySelectorAll('.form-help');
+    helpTexts.forEach((helpText, index) => {
+        const parent = helpText.closest('.form-group');
+        if (parent) {
+            const input = parent.querySelector('input, select, textarea');
+            if (input) {
+                switch (input.id) {
+                    case 'promptModel':
+                        helpText.textContent = i18n('specific_model_help');
+                        break;
+                    case 'knowledgeBaseFiles':
+                        helpText.textContent = i18n('knowledge_base_files_help');
+                        break;
+                    case 'sapGenAiUrl':
+                        helpText.textContent = i18n('sap_genai_url_help');
+                        break;
+                    case 'defaultModel':
+                        helpText.textContent = i18n('default_model_help');
+                        break;
+                    case 'language':
+                        helpText.textContent = i18n('language_help');
+                        break;
+                    case 'storageType':
+                        helpText.textContent = i18n('storage_type_help');
+                        break;
+                }
+            }
+        }
+    });
+    
+    // Atualizar opções dos selects
+    updateSelectOptions();
+    
+    // Atualizar textos dos checkboxes de botões visíveis
+    const checkboxTexts = [
+        { id: 'showCopyPrompt', key: 'button_copy_prompt' },
+        { id: 'showCopyAhk', key: 'button_copy_ahk' },
+        { id: 'showAutomateSap', key: 'button_automate_sap' },
+        { id: 'showEdit', key: 'button_edit' },
+        { id: 'showDelete', key: 'button_delete' }
+    ];
+    
+    checkboxTexts.forEach(({ id, key }) => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) {
+            const span = checkbox.nextElementSibling;
+            if (span && span.tagName === 'SPAN') {
+                span.textContent = i18n(key);
+            }
+        }
+    });
+    
+    // Atualizar label "Botões Visíveis"
+    const visibleButtonsLabel = document.querySelector('#showCopyPrompt').closest('.form-group').querySelector('label:first-child');
+    if (visibleButtonsLabel) {
+        visibleButtonsLabel.textContent = i18n('visible_buttons_label');
+    }
+    
+    // Atualizar help text dos botões visíveis
+    const visibleButtonsHelp = document.querySelector('#showCopyPrompt').closest('.form-group').querySelector('.form-help');
+    if (visibleButtonsHelp) {
+        visibleButtonsHelp.textContent = i18n('visible_buttons_help');
+    }
+    
+    // Atualizar backup section
+    const backupLabel = document.querySelector('label[for="storageType"]').parentNode.nextElementSibling?.querySelector('label');
+    if (backupLabel && backupLabel.textContent.includes('Backup')) {
+        backupLabel.textContent = i18n('backup_restore_label');
+    }
+    
+    const backupHelp = document.querySelector('.backup-controls')?.nextElementSibling;
+    if (backupHelp && backupHelp.classList.contains('form-help')) {
+        backupHelp.textContent = i18n('backup_restore_help');
+    }
+    
+    // Re-renderizar prompts para atualizar textos
+    renderPrompts();
+}
+
+/**
+ * Atualiza as opções dos selects com traduções
+ */
+function updateSelectOptions() {
+    // Atualizar opções do modelo
+    const promptModel = document.getElementById('promptModel');
+    if (promptModel) {
+        const defaultOption = promptModel.querySelector('option[value=""]');
+        if (defaultOption) {
+            defaultOption.textContent = i18n('use_default_model_option');
+        }
+    }
+    
+    // Atualizar opções do storage
+    const storageType = document.getElementById('storageType');
+    if (storageType) {
+        const localOption = storageType.querySelector('option[value="local"]');
+        if (localOption) {
+            localOption.textContent = i18n('local_storage_option');
+        }
+    }
+    
+    // Atualizar opções de idioma
+    const languageSelect = document.getElementById('language');
+    if (languageSelect) {
+        const options = languageSelect.querySelectorAll('option');
+        options.forEach(option => {
+            switch (option.value) {
+                case 'pt_BR':
+                    option.textContent = i18n('language_portuguese');
+                    break;
+                case 'en':
+                    option.textContent = i18n('language_english');
+                    break;
+                case 'es':
+                    option.textContent = i18n('language_spanish');
+                    break;
+                case 'fr':
+                    option.textContent = i18n('language_french');
+                    break;
+            }
+        });
+    }
+}
+
+/**
+ * Carrega o idioma atual e atualiza a UI
+ */
+async function loadCurrentLanguage() {
+    try {
+        const response = await chrome.runtime.sendMessage({ action: 'getCurrentLanguage' });
+        if (response.success) {
+            const language = response.language;
+            
+            // Carregar traduções para o idioma atual
+            await loadTranslations(language);
+            
+            const languageSelect = document.getElementById('language');
+            if (languageSelect) {
+                languageSelect.value = language;
+            }
+            
+            // Atualizar o atributo lang do HTML
+            document.documentElement.lang = language === 'pt_BR' ? 'pt-BR' : 
+                                          language === 'en' ? 'en-US' : 
+                                          language === 'es' ? 'es-ES' : 
+                                          language === 'fr' ? 'fr-FR' : 'pt-BR';
+        }
+    } catch (error) {
+        console.error('Erro ao carregar idioma atual:', error);
+    }
+}
+
+/**
+ * Trata mudança de idioma
+ */
+async function handleLanguageChange(newLanguage) {
+    try {
+        const response = await chrome.runtime.sendMessage({ 
+            action: 'setLanguage', 
+            language: newLanguage 
+        });
+        
+        if (response.success) {
+            // Carregar novas traduções
+            await loadTranslations(newLanguage);
+            
+            // Atualizar interface com novas traduções
+            updateUI();
+            
+            // Atualizar o atributo lang do HTML
+            document.documentElement.lang = newLanguage === 'pt_BR' ? 'pt-BR' : 
+                                          newLanguage === 'en' ? 'en-US' : 
+                                          newLanguage === 'es' ? 'es-ES' : 
+                                          newLanguage === 'fr' ? 'fr-FR' : 'pt-BR';
+        } else {
+            alert(i18n('error_saving_config_alert') + (response.error || ''));
+        }
+    } catch (error) {
+        console.error('Erro ao alterar idioma:', error);
+        alert(i18n('error_saving_config_alert') + error.message);
+    }
+}
+
 // Elementos DOM
 const searchInput = document.getElementById('searchInput');
 const addNewBtn = document.getElementById('addNewBtn');
@@ -30,16 +381,45 @@ const DEFAULT_SAP_GENAI_URL = 'https://sapit-core-playground-vole.ai-launchpad.p
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', async () => {
-    await Promise.all([
-        loadPrompts(),
-        loadConfig()
-    ]);
-    
-    renderPrompts();
-    setupEventListeners();
-    
-    // Verificar se foi chamado via protocolo AHK
-    checkProtocolAction();
+    try {
+        console.log('Iniciando popup...');
+        
+        // Carregar dados básicos
+        await Promise.all([
+            loadPrompts().catch(err => console.error('Erro loadPrompts:', err)),
+            loadConfig().catch(err => console.error('Erro loadConfig:', err))
+        ]);
+        
+        // Carregar idioma (pode falhar, mas não deve quebrar a extensão)
+        try {
+            await loadCurrentLanguage();
+        } catch (error) {
+            console.error('Erro ao carregar idioma, usando padrão:', error);
+            // Fallback: usar português como padrão
+            await loadTranslations('pt_BR').catch(() => {
+                console.log('Usando chrome.i18n como fallback');
+            });
+        }
+        
+        // Atualizar interface com traduções
+        updateUI();
+        renderPrompts();
+        setupEventListeners();
+        
+        // Verificar se foi chamado via protocolo AHK
+        checkProtocolAction();
+        
+        console.log('Popup inicializado com sucesso');
+    } catch (error) {
+        console.error('Erro crítico na inicialização:', error);
+        // Tentar continuar mesmo com erro
+        try {
+            renderPrompts();
+            setupEventListeners();
+        } catch (fallbackError) {
+            console.error('Erro no fallback:', fallbackError);
+        }
+    }
 });
 
 // Carregar prompts do storage
@@ -65,11 +445,29 @@ async function loadConfig() {
         }
         // Forçar armazenamento local
         config.storageType = 'local';
+        
+        // Configuração padrão dos botões visíveis
+        if (!config.visibleButtons) {
+            config.visibleButtons = {
+                copyPrompt: true,
+                copyAhk: false,
+                automateSap: false,
+                edit: true,
+                delete: true
+            };
+        }
     } catch (error) {
         console.error('Erro ao carregar configurações:', error);
         config = { 
             sapGenAiUrl: DEFAULT_SAP_GENAI_URL,
-            storageType: 'local'
+            storageType: 'local',
+            visibleButtons: {
+                copyPrompt: true,
+                copyAhk: false,
+                automateSap: false,
+                edit: true,
+                delete: true
+            }
         };
     }
 }
@@ -100,8 +498,8 @@ function renderPrompts(filteredPrompts = null) {
     if (promptsToRender.length === 0) {
         promptsList.innerHTML = `
             <div class="empty-state">
-                <h3>Nenhum prompt encontrado</h3>
-                <p>${filteredPrompts ? 'Tente ajustar sua busca' : 'Comece adicionando seu primeiro prompt'}</p>
+                <h3>${i18n('no_prompts_found_title')}</h3>
+                <p>${filteredPrompts ? i18n('try_adjust_search') : i18n('start_adding_first_prompt')}</p>
             </div>
         `;
         return;
@@ -111,7 +509,10 @@ function renderPrompts(filteredPrompts = null) {
         <div class="prompt-item" data-id="${prompt.id}">
             <div class="prompt-header">
                 <h3 class="prompt-title">${escapeHtml(prompt.title)}</h3>
-                ${prompt.category ? `<span class="prompt-category">${escapeHtml(prompt.category)}</span>` : ''}
+                <div class="prompt-meta">
+                    ${prompt.category ? `<span class="prompt-category">${escapeHtml(prompt.category)}</span>` : ''}
+                    ${prompt.model ? `<span class="prompt-model">📱 ${escapeHtml(prompt.model)}</span>` : ''}
+                </div>
             </div>
             <div class="prompt-text">${escapeHtml(prompt.text)}</div>
             ${prompt.tags && prompt.tags.length > 0 ? `
@@ -120,21 +521,72 @@ function renderPrompts(filteredPrompts = null) {
                 </div>
             ` : ''}
             <div class="prompt-actions">
-                <button class="btn-small btn-copy" data-id="${prompt.id}" data-action="copy" title="Copiar URL AHK">
-                    📋 URL AHK
-                </button>
-                <button class="btn-small btn-automate" data-id="${prompt.id}" data-action="automate" title="Automatizar no SAP Generative AI">
-                    🤖 Automatizar
-                </button>
-                <button class="btn-small btn-edit" data-id="${prompt.id}" data-action="edit" title="Editar">
-                    ✏️ Editar
-                </button>
-                <button class="btn-small btn-delete" data-id="${prompt.id}" data-action="delete" title="Excluir">
-                    🗑️ Excluir
-                </button>
+                ${generatePromptButtons(prompt.id)}
             </div>
         </div>
     `).join('');
+}
+
+/**
+ * Gera botões de ação para um prompt baseado na configuração
+ */
+function generatePromptButtons(promptId) {
+    const visibleButtons = config.visibleButtons || {
+        copyPrompt: true,
+        copyAhk: false,
+        automateSap: false,
+        edit: false,
+        delete: false
+    };
+    
+    let buttons = [];
+    
+    // Botão para copiar prompt diretamente
+    if (visibleButtons.copyPrompt) {
+        buttons.push(`
+            <button class="btn-small btn-copy-prompt" data-id="${promptId}" data-action="copyPrompt" title="${i18n('copy_prompt_title')}">
+                📄 ${i18n('button_copy_prompt')}
+            </button>
+        `);
+    }
+    
+    // Botão para copiar URL AHK
+    if (visibleButtons.copyAhk) {
+        buttons.push(`
+            <button class="btn-small btn-copy" data-id="${promptId}" data-action="copy" title="${i18n('copy_ahk_url_title')}">
+                📋 ${i18n('button_copy_ahk')}
+            </button>
+        `);
+    }
+    
+    // Botão para automatizar no SAP
+    if (visibleButtons.automateSap) {
+        buttons.push(`
+            <button class="btn-small btn-automate" data-id="${promptId}" data-action="automate" title="${i18n('automate_sap_genai_title')}">
+                🤖 ${i18n('button_automate_sap')}
+            </button>
+        `);
+    }
+    
+    // Botão para editar
+    if (visibleButtons.edit) {
+        buttons.push(`
+            <button class="btn-small btn-edit" data-id="${promptId}" data-action="edit" title="${i18n('edit_title')}">
+                ✏️ ${i18n('button_edit')}
+            </button>
+        `);
+    }
+    
+    // Botão para excluir
+    if (visibleButtons.delete) {
+        buttons.push(`
+            <button class="btn-small btn-delete" data-id="${promptId}" data-action="delete" title="${i18n('delete_title')}">
+                🗑️ ${i18n('button_delete')}
+            </button>
+        `);
+    }
+    
+    return buttons.join('');
 }
 
 // Configurar event listeners
@@ -153,6 +605,14 @@ function setupEventListeners() {
     closeConfigModal.addEventListener('click', closeConfigModalHandler);
     resetConfigBtn.addEventListener('click', resetConfig);
     configForm.addEventListener('submit', handleConfigFormSubmit);
+    
+    // Troca de idioma
+    const languageSelect = document.getElementById('language');
+    if (languageSelect) {
+        languageSelect.addEventListener('change', (e) => {
+            handleLanguageChange(e.target.value);
+        });
+    }
     
     // Configurações de armazenamento
     exportPromptsBtn.addEventListener('click', exportPrompts);
@@ -194,6 +654,9 @@ function setupEventListeners() {
         if (!id) return;
         
         switch (action) {
+            case 'copyPrompt':
+                copyPromptText(id);
+                break;
             case 'copy':
                 copyAhkUrl(id);
                 break;
@@ -258,7 +721,7 @@ function handleSearch() {
 // Abrir modal para adicionar
 function openAddModal() {
     editingPromptId = null;
-    modalTitle.textContent = 'Adicionar Prompt';
+    modalTitle.textContent = i18n('add_prompt_modal_title');
     promptForm.reset();
     
     // Limpar a lista de arquivos selecionados
@@ -275,12 +738,21 @@ function editPrompt(id) {
     if (!prompt) return;
     
     editingPromptId = id;
-    modalTitle.textContent = 'Editar Prompt';
+    modalTitle.textContent = i18n('edit_prompt_modal_title');
     
     document.getElementById('promptTitle').value = prompt.title;
     document.getElementById('promptText').value = prompt.text;
     document.getElementById('promptTags').value = prompt.tags ? prompt.tags.join(', ') : '';
     document.getElementById('promptCategory').value = prompt.category || '';
+    document.getElementById('promptModel').value = prompt.model || '';
+    
+    console.log('Editando prompt:', {
+        id: prompt.id,
+        title: prompt.title,
+        model: prompt.model,
+        category: prompt.category
+    });
+    console.log('Campo promptModel definido para:', prompt.model || 'vazio');
     
     // Limpar a lista de arquivos selecionados
     selectedFiles = [];
@@ -320,10 +792,29 @@ function closeModalHandler() {
 }
 
 // Abrir modal de configurações
-function openConfigModal() {
+async function openConfigModal() {
     // Preencher formulário com valores atuais
     document.getElementById('sapGenAiUrl').value = config.sapGenAiUrl || '';
+    document.getElementById('defaultModel').value = config.defaultModel || '';
     storageTypeSelect.value = 'local';
+    
+    // Carregar configuração dos botões visíveis
+    const visibleButtons = config.visibleButtons || {
+        copyPrompt: true,
+        copyAhk: false,
+        automateSap: false,
+        edit: false,
+        delete: false
+    };
+    
+    document.getElementById('showCopyPrompt').checked = visibleButtons.copyPrompt;
+    document.getElementById('showCopyAhk').checked = visibleButtons.copyAhk;
+    document.getElementById('showAutomateSap').checked = visibleButtons.automateSap;
+    document.getElementById('showEdit').checked = visibleButtons.edit;
+    document.getElementById('showDelete').checked = visibleButtons.delete;
+    
+    // Carregar idioma atual
+    await loadCurrentLanguage();
     
     // Mostrar modal
     configModal.classList.remove('hidden');
@@ -338,15 +829,31 @@ function closeConfigModalHandler() {
 // Resetar configurações para valores padrão
 async function resetConfig() {
     document.getElementById('sapGenAiUrl').value = DEFAULT_SAP_GENAI_URL;
+    document.getElementById('defaultModel').value = '';
     storageTypeSelect.value = 'local';
+    
+    // Resetar checkboxes para configuração padrão
+    document.getElementById('showCopyPrompt').checked = true;
+    document.getElementById('showCopyAhk').checked = false;
+    document.getElementById('showAutomateSap').checked = false;
+    document.getElementById('showEdit').checked = false;
+    document.getElementById('showDelete').checked = false;
     
     // Resetar configurações no objeto
     config.sapGenAiUrl = DEFAULT_SAP_GENAI_URL;
+    config.defaultModel = '';
     config.storageType = 'local';
+    config.visibleButtons = {
+        copyPrompt: true,
+        copyAhk: false,
+        automateSap: false,
+        edit: false,
+        delete: false
+    };
     
     await saveConfig();
     
-    alert('Configurações restauradas para o padrão!');
+    alert(i18n('config_restored_alert'));
 }
 
 // Submeter formulário de configurações
@@ -354,11 +861,22 @@ async function handleConfigFormSubmit(e) {
     e.preventDefault();
     
     const formData = new FormData(configForm);
-    const sapGenAiUrl = formData.get('sapGenAiUrl').trim();
+    const sapGenAiUrl = (formData.get('sapGenAiUrl') || '').trim();
+    const defaultModel = (formData.get('defaultModel') || '').trim();
     
     // Atualizar configurações
     config.sapGenAiUrl = sapGenAiUrl || DEFAULT_SAP_GENAI_URL;
+    config.defaultModel = defaultModel || '';
     config.storageType = 'local';
+    
+    // Salvar configuração dos botões visíveis
+    config.visibleButtons = {
+        copyPrompt: document.getElementById('showCopyPrompt').checked,
+        copyAhk: document.getElementById('showCopyAhk').checked,
+        automateSap: document.getElementById('showAutomateSap').checked,
+        edit: document.getElementById('showEdit').checked,
+        delete: document.getElementById('showDelete').checked
+    };
     
     try {
         // Salvar configurações
@@ -368,10 +886,10 @@ async function handleConfigFormSubmit(e) {
         chrome.runtime.sendMessage({ action: 'configUpdated' });
         
         closeConfigModalHandler();
-        alert('Configurações salvas com sucesso!');
+        alert(i18n('config_saved_success'));
     } catch (error) {
         console.error('Erro ao salvar configurações:', error);
-        alert('Erro ao salvar configurações: ' + error.message);
+        alert(i18n('error_saving_config_alert') + error.message);
     }
 }
 
@@ -419,7 +937,7 @@ async function exportPrompts() {
         URL.revokeObjectURL(url);
     } catch (error) {
         console.error('Erro ao exportar prompts:', error);
-        alert('Erro ao exportar prompts: ' + error.message);
+        alert(i18n('error_exporting_prompts') + error.message);
     }
 }
 
@@ -433,7 +951,7 @@ function importPrompts(file) {
         // Importar do arquivo ZIP (prompts + knowledge base)
         importPromptsFromZip(file);
     } else {
-        alert('Formato de arquivo não suportado. Use .json ou .zip');
+        alert(i18n('unsupported_file_format'));
     }
 }
 
@@ -452,10 +970,10 @@ function importPromptsFromJson(file) {
             await savePrompts();
             renderPrompts();
             
-            alert(`${newPrompts.length} prompts importados com sucesso!`);
+            alert(i18n('prompts_imported_success', [newPrompts.length.toString()]));
         } catch (error) {
             console.error('Erro ao importar prompts:', error);
-            alert('Erro ao importar prompts: ' + error.message);
+            alert(i18n('error_importing_prompts') + error.message);
         }
     };
     reader.readAsText(file);
@@ -548,13 +1066,22 @@ async function handleFormSubmit(e) {
     e.preventDefault();
     
     const formData = new FormData(promptForm);
-    const title = formData.get('title').trim();
-    const text = formData.get('text').trim();
-    const tagsString = formData.get('tags').trim();
-    const category = formData.get('category').trim();
+    const title = formData.get('title')?.trim() || '';
+    const text = formData.get('text')?.trim() || '';
+    const tagsString = formData.get('tags')?.trim() || '';
+    const category = formData.get('category')?.trim() || '';
+    const model = formData.get('promptModel')?.trim() || '';
+    
+    console.log('Dados do formulário capturados:', {
+        title,
+        text: text.substring(0, 50) + '...',
+        category,
+        model,
+        tagsString
+    });
     
     if (!title || !text) {
-        alert('Título e texto são obrigatórios!');
+        alert(i18n('title_text_required'));
         return;
     }
     
@@ -581,8 +1108,12 @@ async function handleFormSubmit(e) {
         text,
         tags,
         category: category || null,
+        model: model || null,
         knowledgeBaseFiles: knowledgeBaseFiles.length > 0 ? knowledgeBaseFiles : null
     };
+    
+    console.log('Dados do prompt a serem salvos:', promptData);
+    console.log('Modelo que será salvo:', model || 'null');
     
     if (editingPromptId) {
         // Editar prompt existente
@@ -600,14 +1131,15 @@ async function handleFormSubmit(e) {
     }
     
     await savePrompts();
-    renderPrompts();
     closeModalHandler();
     
     // Limpar busca se houver
     if (searchInput.value) {
         searchInput.value = '';
-        handleSearch();
     }
+    
+    // Renderizar prompts apenas uma vez
+    renderPrompts();
 }
 
 // Função para ler um arquivo como ArrayBuffer
@@ -678,17 +1210,44 @@ function formatFileSize(bytes) {
 
 // Excluir prompt
 async function deletePrompt(id) {
-    if (!confirm('Tem certeza que deseja excluir este prompt?')) {
+    if (!confirm(i18n('confirm_delete_prompt'))) {
         return;
     }
     
     prompts = prompts.filter(p => p.id !== id);
     await savePrompts();
-    renderPrompts();
     
-    // Atualizar busca se houver
+    // Renderizar prompts apenas uma vez
     if (searchInput.value) {
         handleSearch();
+    } else {
+        renderPrompts();
+    }
+}
+
+// Copiar texto do prompt diretamente para área de transferência
+async function copyPromptText(id) {
+    try {
+        const prompt = prompts.find(p => p.id === id);
+        if (!prompt) return;
+        
+        await navigator.clipboard.writeText(prompt.text);
+        
+        // Feedback visual
+        const button = document.querySelector(`.btn-copy-prompt[data-id="${id}"]`);
+        if (button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = i18n('prompt_copied_feedback');
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Erro ao copiar prompt:', error);
+        alert(i18n('error_copying_prompt'));
     }
 }
 
@@ -724,7 +1283,7 @@ F2::
         const button = document.querySelector(`.btn-copy[data-id="${id}"]`);
         if (button) {
             const originalText = button.innerHTML;
-            button.innerHTML = '✅ Copiado!';
+            button.innerHTML = i18n('copied_feedback');
             button.disabled = true;
             
             setTimeout(() => {
@@ -734,7 +1293,7 @@ F2::
         }
     } catch (error) {
         console.error('Erro ao copiar código AHK:', error);
-        alert('Erro ao copiar código AHK para o clipboard');
+        alert(i18n('error_copying_ahk'));
     }
 }
 
@@ -781,7 +1340,7 @@ async function automatePrompt(id) {
             const button = document.querySelector(`.btn-automate[data-id="${id}"]`);
             if (button) {
                 const originalText = button.innerHTML;
-                button.innerHTML = '✅ Iniciado!';
+                button.innerHTML = i18n('started_feedback');
                 button.disabled = true;
                 
                 setTimeout(() => {
@@ -795,11 +1354,11 @@ async function automatePrompt(id) {
                 window.close();
             }, 500);
         } else {
-            alert('Erro ao automatizar prompt: ' + (response?.error || 'Erro desconhecido'));
+            alert(i18n('error_automating_prompt') + (response?.error || 'Erro desconhecido'));
         }
     } catch (error) {
         console.error('Erro ao automatizar prompt:', error);
-        alert('Erro ao automatizar prompt: ' + error.message);
+        alert(i18n('error_automating_prompt_alt') + error.message);
     }
 }
 

@@ -183,8 +183,24 @@ header h1 {
   margin: 0;
 }
 
+.prompt-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .prompt-category {
   background-color: var(--accent-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.prompt-model {
+  background-color: #6f42c1;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -501,6 +517,41 @@ select:focus {
 .form-group textarea {
   resize: vertical;
   min-height: 100px;
+}
+
+/* Estilos para checkbox group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: background-color 0.2s ease;
+}
+
+.checkbox-item:hover {
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: auto !important;
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox-item span {
+  font-weight: normal;
+  color: var(--text-primary);
+  margin: 0;
 }
 
 /* Estilos para o container de arquivos selecionados */

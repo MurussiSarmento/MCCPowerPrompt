@@ -1,0 +1,960 @@
+{
+  "extension_description": {
+    "message": "Repositório de prompts com integração AHK."
+  },
+  "html_lang": {
+    "message": "pt-BR"
+  },
+  "search_placeholder": {
+    "message": "Buscar prompts..."
+  },
+  "add_new_button": {
+    "message": "Adicionar Novo"
+  },
+  "settings_button_title": {
+    "message": "Configurações"
+  },
+  "prompts_list_comment": {
+    "message": "Lista de prompts será renderizada aqui"
+  },
+  "add_prompt_modal_title": {
+    "message": "Adicionar Prompt"
+  },
+  "edit_prompt_modal_title": {
+    "message": "Editar Prompt"
+  },
+  "title_label": {
+    "message": "Título:"
+  },
+  "text_label": {
+    "message": "Texto:"
+  },
+  "prompt_text_placeholder": {
+    "message": "Digite seu prompt aqui. Use {{variavel}} para criar variáveis dinâmicas."
+  },
+  "tags_label": {
+    "message": "Tags:"
+  },
+  "tags_placeholder": {
+    "message": "tag1, tag2, tag3"
+  },
+  "category_label": {
+    "message": "Categoria:"
+  },
+  "category_placeholder": {
+    "message": "Ex: Desenvolvimento, Marketing, etc."
+  },
+  "specific_model_label": {
+    "message": "Modelo Específico (opcional):"
+  },
+  "use_default_model_option": {
+    "message": "Usar modelo padrão das configurações"
+  },
+  "specific_model_help": {
+    "message": "Modelo específico para este prompt. Se não selecionado, usará o modelo padrão das configurações."
+  },
+  "knowledge_base_files_label": {
+    "message": "Arquivos de Knowledge Base:"
+  },
+  "knowledge_base_files_help": {
+    "message": "Selecione arquivos para anexar ao prompt. Estes arquivos serão exportados junto com os prompts."
+  },
+  "cancel_button": {
+    "message": "Cancelar"
+  },
+  "save_button": {
+    "message": "Salvar"
+  },
+  "settings_modal_title": {
+    "message": "Configurações"
+  },
+  "sap_genai_url_label": {
+    "message": "URL do SAP Generative AI:"
+  },
+  "sap_genai_url_help": {
+    "message": "URL da plataforma SAP Generative AI para injeção de prompts"
+  },
+  "default_model_label": {
+    "message": "Modelo Padrão:"
+  },
+  "default_model_help": {
+    "message": "Modelo que será selecionado automaticamente ao usar prompts"
+  },
+  "storage_type_label": {
+    "message": "Tipo de Armazenamento:"
+  },
+  "local_storage_option": {
+    "message": "Armazenamento Local (Chrome)"
+  },
+  "storage_type_help": {
+    "message": "Os prompts serão salvos no armazenamento local do navegador. Use as funções de exportar/importar para fazer backup."
+  },
+  "backup_restore_label": {
+    "message": "Backup e Restauração:"
+  },
+  "export_prompts_button": {
+    "message": "Exportar Prompts"
+  },
+  "import_prompts_button": {
+    "message": "Importar Prompts"
+  },
+  "backup_restore_help": {
+    "message": "Faça backup ou restaure seus prompts através de arquivo JSON"
+  },
+  "reset_default_button": {
+    "message": "Restaurar Padrão"
+  },
+  "language_label": {
+    "message": "Idioma:"
+  },
+  "language_help": {
+    "message": "Selecione o idioma da interface da extensão"
+  },
+  "language_portuguese": {
+    "message": "Português (Brasil)"
+  },
+  "language_english": {
+    "message": "English (US)"
+  },
+  "language_spanish": {
+    "message": "Español"
+  },
+  "language_french": {
+    "message": "Français"
+  },
+  "error_loading_prompts": {
+    "message": "Erro ao carregar prompts:"
+  },
+  "error_loading_config": {
+    "message": "Erro ao carregar configurações:"
+  },
+  "config_saved_log": {
+    "message": "Configurações salvas:"
+  },
+  "error_saving_config": {
+    "message": "Erro ao salvar configurações:"
+  },
+  "error_saving_prompts": {
+    "message": "Erro ao salvar prompts:"
+  },
+  "no_prompts_found_title": {
+    "message": "Nenhum prompt encontrado"
+  },
+  "try_adjust_search": {
+    "message": "Tente ajustar sua busca"
+  },
+  "start_adding_first_prompt": {
+    "message": "Comece adicionando seu primeiro prompt"
+  },
+  "copy_ahk_url_title": {
+    "message": "Copiar URL AHK"
+  },
+  "automate_sap_genai_title": {
+    "message": "Automatizar no SAP Generative AI"
+  },
+  "edit_title": {
+    "message": "Editar"
+  },
+  "delete_title": {
+    "message": "Excluir"
+  },
+  "config_restored_alert": {
+    "message": "Configurações restauradas para o padrão!"
+  },
+  "config_saved_success": {
+    "message": "Configurações salvas com sucesso!"
+  },
+  "error_saving_config_alert": {
+    "message": "Erro ao salvar configurações: "
+  },
+  "error_exporting_prompts": {
+    "message": "Erro ao exportar prompts: "
+  },
+  "unsupported_file_format": {
+    "message": "Formato de arquivo não suportado. Use .json ou .zip"
+  },
+  "prompts_imported_success": {
+    "message": "$COUNT$ prompts importados com sucesso!",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "error_importing_prompts": {
+    "message": "Erro ao importar prompts: "
+  },
+  "prompts_json_not_found_zip": {
+    "message": "Arquivo prompts.json não encontrado no ZIP"
+  },
+  "prompts_imported_zip_success": {
+    "message": "$COUNT$ prompts importados com sucesso!",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "error_importing_prompts_zip": {
+    "message": "Erro ao importar prompts do ZIP: "
+  },
+  "title_text_required": {
+    "message": "Título e texto são obrigatórios!"
+  },
+  "remove_file_title": {
+    "message": "Remover arquivo"
+  },
+  "confirm_delete_prompt": {
+    "message": "Tem certeza que deseja excluir este prompt?"
+  },
+  "copied_feedback": {
+    "message": "✅ Copiado!"
+  },
+  "error_copying_ahk": {
+    "message": "Erro ao copiar código AHK para o clipboard"
+  },
+  "started_feedback": {
+    "message": "✅ Iniciado!"
+  },
+  "error_automating_prompt": {
+    "message": "Erro ao automatizar prompt: "
+  },
+  "error_automating_prompt_alt": {
+    "message": "Erro ao automatizar prompt: "
+  },
+  "ahk_inject_comment": {
+    "message": "; Código para injetar prompt via AHK"
+  },
+  "ahk_prompt_id_comment": {
+    "message": "; ID do prompt:"
+  },
+  "ahk_option1_comment": {
+    "message": "; Opção 1: Injetar prompt diretamente (F1)"
+  },
+  "ahk_use_external_comment": {
+    "message": "; Usar comunicação externa com a extensão Chrome"
+  },
+  "ahk_option2_comment": {
+    "message": "; Opção 2: Automatizar no SAP Generative AI (F2)"
+  },
+  "ahk_automate_comment": {
+    "message": "; Automatizar prompt no SAP Generative AI"
+  },
+  "background_received_message": {
+    "message": "Background recebeu mensagem:"
+  },
+  "config_updated_reloading_urls": {
+    "message": "Configurações atualizadas, recarregando URLs suportadas"
+  },
+  "supported_urls_updated": {
+    "message": "URLs suportadas atualizadas:"
+  },
+  "filesystem_api_no_permission": {
+    "message": "A API File System Access será usada sem permissão específica"
+  },
+  "filesystem_api_no_permission_needed": {
+    "message": "A API File System Access não requer permissão específica em extensões"
+  },
+  "unrecognized_action": {
+    "message": "Ação não reconhecida:"
+  },
+  "background_received_external_message": {
+    "message": "Background recebeu mensagem externa:"
+  },
+  "unrecognized_external_action": {
+    "message": "Ação externa não reconhecida:"
+  },
+  "starting_automation_for_prompt": {
+    "message": "Iniciando automação para prompt:"
+  },
+  "prompt_not_found": {
+    "message": "Prompt não encontrado"
+  },
+  "prompt_found": {
+    "message": "Prompt encontrado:"
+  },
+  "injecting_automation_script": {
+    "message": "Injetando script de automação..."
+  },
+  "automation_script_already_injected": {
+    "message": "Script de automação já injetado, pulando injeção"
+  },
+  "automation_started_success": {
+    "message": "Automação iniciada com sucesso"
+  },
+  "automation_started_success_response": {
+    "message": "Automação iniciada com sucesso"
+  },
+  "failed_to_automate_prompt": {
+    "message": "Falha ao automatizar prompt"
+  },
+  "failed_to_automate_prompt_error": {
+    "message": "Falha ao automatizar prompt"
+  },
+  "error_getting_configured_urls": {
+    "message": "Erro ao obter URLs configuradas:"
+  },
+  "starting_injection_for_prompt": {
+    "message": "Iniciando injeção para prompt:"
+  },
+  "prompt_not_found_error": {
+    "message": "Prompt não encontrado:"
+  },
+  "prompt_not_found_response": {
+    "message": "Prompt não encontrado"
+  },
+  "prompt_found_log": {
+    "message": "Prompt encontrado:"
+  },
+  "no_compatible_tab_found": {
+    "message": "Nenhuma aba compatível encontrada"
+  },
+  "open_supported_page": {
+    "message": "Abra uma das páginas suportadas (ChatGPT, Gemini ou Claude)"
+  },
+  "no_compatible_tab_found_response": {
+    "message": "Nenhuma aba compatível encontrada"
+  },
+  "compatible_tab_found": {
+    "message": "Aba compatível encontrada:"
+  },
+  "prompt_injected_success": {
+    "message": "Prompt injetado com sucesso"
+  },
+  "prompt_injected_success_response": {
+    "message": "Prompt injetado com sucesso"
+  },
+  "failed_to_inject_prompt": {
+    "message": "Falha ao injetar prompt"
+  },
+  "failed_to_inject_prompt_error": {
+    "message": "Falha ao injetar prompt"
+  },
+  "error_fetching_prompt_storage": {
+    "message": "Erro ao buscar prompt no storage:"
+  },
+  "supported_urls_log": {
+    "message": "URLs suportadas:"
+  },
+  "error_finding_compatible_tab": {
+    "message": "Erro ao buscar aba compatível:"
+  },
+  "error_injecting_prompt_tab": {
+    "message": "Erro ao injetar prompt na aba:"
+  },
+  "content_script_not_found": {
+    "message": "Content script não encontrado, injetando manualmente..."
+  },
+  "error_injecting_content_script": {
+    "message": "Erro ao injetar content script:"
+  },
+  "could_not_load_content_script": {
+    "message": "Não foi possível carregar o content script"
+  },
+  "error_fetching_prompt": {
+    "message": "Erro ao buscar prompt:"
+  },
+  "extension_installed_updated": {
+    "message": "mcc PromptFlow instalado/atualizado:"
+  },
+  "first_installation": {
+    "message": "Primeira instalação da extensão"
+  },
+  "extension_started": {
+    "message": "mcc PromptFlow iniciado"
+  },
+  "background_script_loaded": {
+    "message": "Background script mcc PromptFlow carregado"
+  },
+  "initializing_content_script": {
+    "message": "mcc PromptFlow: Inicializando content script em"
+  },
+  "content_script_configured": {
+    "message": "mcc PromptFlow: Content script configurado"
+  },
+  "textarea_detected": {
+    "message": "mcc PromptFlow: Textarea detectada"
+  },
+  "open_extension_title": {
+    "message": "mcc PromptFlow - Abrir extensão"
+  },
+  "opening_popup_fallback": {
+    "message": "Abrindo popup via fallback"
+  },
+  "content_script_received_message": {
+    "message": "Content script recebeu mensagem:"
+  },
+  "content_script_received_automation": {
+    "message": "Content script recebeu solicitação de automação"
+  },
+  "automate_function_found": {
+    "message": "Função automatePromptUsage encontrada, chamando diretamente"
+  },
+  "automate_function_not_found": {
+    "message": "Função automatePromptUsage não encontrada"
+  },
+  "automation_script_not_loaded": {
+    "message": "Script de automação não carregado. Por favor, tente novamente."
+  },
+  "unrecognized_action_content": {
+    "message": "Ação não reconhecida:"
+  },
+  "unrecognized_action_error": {
+    "message": "Ação não reconhecida"
+  },
+  "starting_prompt_injection": {
+    "message": "Iniciando injeção de prompt:"
+  },
+  "textarea_not_found": {
+    "message": "Textarea não encontrada"
+  },
+  "prompt_injected_success_content": {
+    "message": "Prompt injetado com sucesso"
+  },
+  "error_injecting_prompt_content": {
+    "message": "Erro ao injetar prompt:"
+  },
+  "error_injecting_prompt_alert": {
+    "message": "Erro ao injetar prompt: "
+  },
+  "enter_value_for": {
+    "message": "Insira o valor para: "
+  },
+  "injection_cancelled_by_user": {
+    "message": "Injeção cancelada pelo usuário"
+  },
+  "textarea_not_found_inject": {
+    "message": "Textarea não encontrada"
+  },
+  "content_script_loaded": {
+    "message": "mcc PromptFlow: Content script carregado em"
+  },
+  "detecting_textarea_selector": {
+    "message": "Detectando automaticamente o seletor para o textarea..."
+  },
+  "selector_detected_automatically": {
+    "message": "Seletor detectado automaticamente:"
+  },
+  "selector_saved_storage": {
+    "message": "Seletor salvo no storage local"
+  },
+  "could_not_save_selector": {
+    "message": "Não foi possível salvar o seletor no storage:"
+  },
+  "could_not_detect_selector": {
+    "message": "Não foi possível detectar automaticamente o seletor"
+  },
+  "sap_script_already_initialized": {
+    "message": "Script de automação SAP já inicializado, pulando inicialização"
+  },
+  "initializing_sap_script_first_time": {
+    "message": "Inicializando script de automação SAP pela primeira vez"
+  },
+  "selector_loaded_from_storage": {
+    "message": "Seletor carregado do storage:"
+  },
+  "no_saved_selector_found": {
+    "message": "Nenhum seletor salvo encontrado, tentando detectar automaticamente..."
+  },
+  "using_detected_selector": {
+    "message": "Usando seletor detectado:"
+  },
+  "error_loading_selector_storage": {
+    "message": "Erro ao carregar seletor do storage:"
+  },
+  "sap_selectors_defined": {
+    "message": "Seletores SAP definidos:"
+  },
+  "error_checking_sap_url": {
+    "message": "Erro ao verificar URL do SAP Generative AI:"
+  },
+  "error_opening_sap_chat": {
+    "message": "Erro ao abrir chat do SAP Generative AI:"
+  },
+  "trying_to_find_textarea": {
+    "message": "Tentando encontrar textarea com seletor:"
+  },
+  "textarea_found_with_selector": {
+    "message": "Textarea encontrado com seletor:"
+  },
+  "selector_did_not_find_element": {
+    "message": "Seletor $SELECTOR$ não encontrou o elemento",
+    "placeholders": {
+      "selector": {
+        "content": "$1",
+        "example": "#textarea"
+      }
+    }
+  },
+  "no_element_found_trying_aggressive": {
+    "message": "Nenhum elemento encontrado com seletores padrão, tentando busca agressiva..."
+  },
+  "could_not_find_textarea_any_selector": {
+    "message": "Não foi possível encontrar o textarea em nenhum dos seletores testados"
+  },
+  "element_found_aggressive_search": {
+    "message": "Elemento encontrado com busca agressiva:"
+  },
+  "injecting_text_element": {
+    "message": "Injetando texto no elemento:"
+  },
+  "typing_simulation_completed": {
+    "message": "Simulação de digitação concluída"
+  },
+  "error_simulating_typing": {
+    "message": "Erro ao simular digitação:"
+  },
+  "error_setting_value_trying_innerHTML": {
+    "message": "Erro ao definir value, tentando innerHTML:"
+  },
+  "event_fired_successfully": {
+    "message": "Evento $EVENTTYPE$ disparado com sucesso",
+    "placeholders": {
+      "eventtype": {
+        "content": "$1",
+        "example": "input"
+      }
+    }
+  },
+  "error_firing_event": {
+    "message": "Erro ao disparar evento $EVENTTYPE$:",
+    "placeholders": {
+      "eventtype": {
+        "content": "$1",
+        "example": "input"
+      }
+    }
+  },
+  "input_event_fired_successfully": {
+    "message": "InputEvent disparado com sucesso"
+  },
+  "error_firing_input_event": {
+    "message": "Erro ao disparar InputEvent:"
+  },
+  "enter_key_event_fired": {
+    "message": "Evento de tecla Enter disparado"
+  },
+  "error_simulating_enter": {
+    "message": "Erro ao simular pressionar Enter:"
+  },
+  "send_button_found_selector": {
+    "message": "Botão de envio encontrado com seletor:"
+  },
+  "send_button_clicked": {
+    "message": "Botão de envio clicado"
+  },
+  "error_clicking_send_button": {
+    "message": "Erro ao clicar no botão de envio:"
+  },
+  "prompt_injected_successfully": {
+    "message": "Prompt injetado com sucesso"
+  },
+  "error_injecting_prompt_sap": {
+    "message": "Erro ao injetar prompt:"
+  },
+  "starting_automatic_model_selection": {
+    "message": "Iniciando seleção automática do modelo:"
+  },
+  "trying_to_find_model_name_button": {
+    "message": "Tentando encontrar botão de nome do modelo com seletor:"
+  },
+  "model_name_button_found_selector": {
+    "message": "Botão de nome do modelo encontrado com seletor:"
+  },
+  "selector_did_not_find_model_button": {
+    "message": "Seletor $SELECTOR$ não encontrou o botão de nome do modelo",
+    "placeholders": {
+      "selector": {
+        "content": "$1",
+        "example": "#model-button"
+      }
+    }
+  },
+  "trying_find_model_button_by_text": {
+    "message": "Tentando encontrar botão de nome do modelo por texto..."
+  },
+  "model_name_button_found_by_text": {
+    "message": "Botão de nome do modelo encontrado por texto"
+  },
+  "model_button_not_found_trying_settings": {
+    "message": "Botão de nome do modelo não encontrado, tentando encontrar botão de configurações..."
+  },
+  "trying_find_settings_button": {
+    "message": "Tentando encontrar botão de configurações com seletor:"
+  },
+  "settings_button_found_selector": {
+    "message": "Botão de configurações encontrado com seletor:"
+  },
+  "selector_did_not_find_settings_button": {
+    "message": "Seletor $SELECTOR$ não encontrou o botão de configurações",
+    "placeholders": {
+      "selector": {
+        "content": "$1",
+        "example": "#settings-button"
+      }
+    }
+  },
+  "clicking_model_name_button": {
+    "message": "Clicando no botão de nome do modelo..."
+  },
+  "clicking_settings_button": {
+    "message": "Clicando no botão de configurações..."
+  },
+  "settings_button_not_found": {
+    "message": "Botão de configurações não encontrado"
+  },
+  "waiting_model_selection_menu": {
+    "message": "Aguardando menu de seleção de modelo carregar..."
+  },
+  "found_possible_model_elements": {
+    "message": "Encontrados $COUNT$ possíveis elementos de modelo",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "checking_element_with_text": {
+    "message": "Verificando elemento com texto:"
+  },
+  "model_found_clicking_element": {
+    "message": "✅ Modelo encontrado! Clicando no elemento..."
+  },
+  "element_text": {
+    "message": "Texto do elemento:"
+  },
+  "model_not_found_trying_alternative": {
+    "message": "⚠️ Modelo não encontrado nos elementos principais, tentando busca alternativa..."
+  },
+  "searching_clickable_elements": {
+    "message": "Procurando em $COUNT$ elementos clicáveis...",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "model_found_alternative_clickable": {
+    "message": "✅ Modelo encontrado em elemento clicável alternativo!"
+  },
+  "element_log": {
+    "message": "Elemento:"
+  },
+  "text_log": {
+    "message": "Texto:"
+  },
+  "model_selected_successfully": {
+    "message": "Modelo $MODELNAME$ selecionado com sucesso!",
+    "placeholders": {
+      "modelname": {
+        "content": "$1",
+        "example": "GPT-4"
+      }
+    }
+  },
+  "confirmation_button_found_selector": {
+    "message": "Botão de confirmação encontrado com seletor:"
+  },
+  "error_clicking_confirmation_button": {
+    "message": "Erro ao tentar clicar no botão de confirmação:"
+  },
+  "confirmation_button_texts": {
+    "message": "Aplicar', 'Apply', 'OK', 'Confirmar', 'Save', 'Salvar"
+  },
+  "confirmation_button_found_by_text": {
+    "message": "Botão de confirmação encontrado por texto:"
+  },
+  "model_not_found_in_list": {
+    "message": "❌ Modelo $MODELNAME$ não encontrado na lista de modelos disponíveis",
+    "placeholders": {
+      "modelname": {
+        "content": "$1",
+        "example": "GPT-4"
+      }
+    }
+  },
+  "diagnostic_available_elements": {
+    "message": "=== DIAGNÓSTICO: Elementos disponíveis ==="
+  },
+  "elements_with_text_found": {
+    "message": "Elementos com texto encontrados:"
+  },
+  "end_of_diagnostic": {
+    "message": "=== FIM DO DIAGNÓSTICO ==="
+  },
+  "error_selecting_model": {
+    "message": "Erro ao selecionar modelo:"
+  },
+  "prompt_no_knowledge_base_files": {
+    "message": "Prompt não possui arquivos de knowledge base"
+  },
+  "trying_find_upload_button": {
+    "message": "Tentando encontrar botão de upload com seletor:"
+  },
+  "upload_button_found_selector": {
+    "message": "Botão de upload encontrado com seletor:"
+  },
+  "selector_did_not_find_upload_button": {
+    "message": "Seletor $SELECTOR$ não encontrou o botão de upload",
+    "placeholders": {
+      "selector": {
+        "content": "$1",
+        "example": "#upload-button"
+      }
+    }
+  },
+  "could_not_find_upload_button": {
+    "message": "Não foi possível encontrar o botão de upload em nenhum dos seletores testados"
+  },
+  "knowledge_base_file_sent_successfully": {
+    "message": "Arquivo de knowledge base enviado com sucesso"
+  },
+  "file_input_not_found": {
+    "message": "Input de arquivo não encontrado"
+  },
+  "error_uploading_knowledge_base": {
+    "message": "Erro ao fazer upload do arquivo de knowledge base:"
+  },
+  "waiting_element_with_selector": {
+    "message": "Aguardando elemento com seletor:"
+  },
+  "element_found_immediately": {
+    "message": "Elemento encontrado imediatamente:"
+  },
+  "element_found_after_time": {
+    "message": "Elemento encontrado após $TIME$ms:",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "1500"
+      }
+    }
+  },
+  "still_waiting_element": {
+    "message": "Ainda aguardando elemento $SELECTOR$ ($TIME$ms decorridos)",
+    "placeholders": {
+      "selector": {
+        "content": "$1",
+        "example": "#element"
+      },
+      "time": {
+        "content": "$2",
+        "example": "3000"
+      }
+    }
+  },
+  "element_diagnostic": {
+    "message": "=== DIAGNÓSTICO DE ELEMENTOS ==="
+  },
+  "total_elements": {
+    "message": "Total de elementos:"
+  },
+  "textareas_found": {
+    "message": "Textareas encontradas:"
+  },
+  "editable_elements_found": {
+    "message": "Elementos editáveis encontrados:"
+  },
+  "specific_sap_elements": {
+    "message": "Elementos SAP específicos:"
+  },
+  "timeout_waiting_element": {
+    "message": "Timeout ($TIMEOUT$ms) esperando pelo elemento:",
+    "placeholders": {
+      "timeout": {
+        "content": "$1",
+        "example": "10000"
+      }
+    }
+  },
+  "trying_find_alternative_element": {
+    "message": "Tentando encontrar elemento alternativo como fallback..."
+  },
+  "element_found_mutation_observer": {
+    "message": "Elemento encontrado por MutationObserver:"
+  },
+  "error_configuring_mutation_observer": {
+    "message": "Erro ao configurar MutationObserver:"
+  },
+  "searching_any_text_input_element": {
+    "message": "Procurando por qualquer elemento de entrada de texto na página..."
+  },
+  "found_elements_with_selector": {
+    "message": "Encontrados $COUNT$ elementos com seletor:",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "total_text_input_elements_found": {
+    "message": "Total de $COUNT$ elementos de entrada de texto encontrados",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "starting_prompt_automation_with_id": {
+    "message": "Iniciando automação de prompt com ID:"
+  },
+  "is_in_sap_chat": {
+    "message": "Está no chat SAP?"
+  },
+  "not_in_sap_chat_opening_tab": {
+    "message": "Não estamos no chat SAP, abrindo nova aba..."
+  },
+  "searching_prompt_storage": {
+    "message": "Buscando prompt no storage..."
+  },
+  "prompt_not_found_automation": {
+    "message": "Prompt não encontrado"
+  },
+  "prompt_found_automation": {
+    "message": "Prompt encontrado:"
+  },
+  "prompt_specific_model": {
+    "message": "Modelo específico do prompt:"
+  },
+  "model_selection_analysis": {
+    "message": "=== ANÁLISE DE SELEÇÃO DE MODELO ==="
+  },
+  "prompt_model": {
+    "message": "Modelo do prompt:"
+  },
+  "default_config_model": {
+    "message": "Modelo padrão das configurações:"
+  },
+  "fallback_model": {
+    "message": "Modelo fallback:"
+  },
+  "using_prompt_specific_model": {
+    "message": "✅ USANDO modelo específico do prompt:"
+  },
+  "using_default_config_model": {
+    "message": "✅ USANDO modelo padrão das configurações:"
+  },
+  "using_fallback_model": {
+    "message": "✅ USANDO modelo padrão fallback:"
+  },
+  "final_selected_model": {
+    "message": "=== MODELO FINAL SELECIONADO:"
+  },
+  "trying_to_select_model": {
+    "message": "Tentando selecionar modelo:"
+  },
+  "model_selected_successfully_automation": {
+    "message": "Modelo selecionado com sucesso"
+  },
+  "error_selecting_model_continuing": {
+    "message": "Erro ao selecionar modelo, continuando com o modelo atual:"
+  },
+  "trying_detect_correct_selector": {
+    "message": "Tentando detectar o seletor correto..."
+  },
+  "using_detected_selector_automation": {
+    "message": "Usando seletor detectado:"
+  },
+  "using_default_selector": {
+    "message": "Usando seletor padrão:"
+  },
+  "attempt1_using_inject_function": {
+    "message": "Tentativa 1: Usando função injectPromptText..."
+  },
+  "text_injected_success_inject_function": {
+    "message": "Texto injetado com sucesso usando injectPromptText"
+  },
+  "attempt1_failed": {
+    "message": "Falha na tentativa 1:"
+  },
+  "attempt2_using_detected_selector": {
+    "message": "Tentativa 2: Usando seletor detectado diretamente..."
+  },
+  "element_found_detected_selector": {
+    "message": "Elemento encontrado com seletor detectado"
+  },
+  "text_injected_success_detected_selector": {
+    "message": "Texto injetado com sucesso usando seletor detectado"
+  },
+  "element_not_found_detected_selector": {
+    "message": "Elemento não encontrado com seletor detectado"
+  },
+  "attempt2_failed": {
+    "message": "Falha na tentativa 2:"
+  },
+  "attempt3_using_find_any_element": {
+    "message": "Tentativa 3: Usando findAnyTextInputElement..."
+  },
+  "text_injected_success_alternative_method": {
+    "message": "Texto injetado com sucesso usando método alternativo"
+  },
+  "could_not_find_any_text_input_element": {
+    "message": "Não foi possível encontrar nenhum elemento de entrada de texto na página"
+  },
+  "all_text_injection_attempts_failed": {
+    "message": "Todas as tentativas de injeção de texto falharam"
+  },
+  "prompt_has_knowledge_base_uploading": {
+    "message": "Prompt tem arquivos de knowledge base, fazendo upload..."
+  },
+  "automation_completed_successfully": {
+    "message": "Automação concluída com sucesso"
+  },
+  "prompt_automated_successfully": {
+    "message": "Prompt automatizado com sucesso"
+  },
+  "error_automating_prompt_usage": {
+    "message": "Erro ao automatizar uso de prompt:"
+  },
+  "sap_automation_received_message": {
+    "message": "SAP Automation recebeu mensagem:"
+  },
+  "starting_prompt_automation": {
+    "message": "Iniciando automação do prompt:"
+  },
+  "automation_result": {
+    "message": "Resultado da automação:"
+  },
+  "automation_error": {
+    "message": "Erro na automação:"
+  },
+  "sap_automation_script_loaded": {
+    "message": "Script de automação do SAP Generative AI carregado"
+  },
+  "visible_buttons_label": {
+    "message": "Botões Visíveis:"
+  },
+  "visible_buttons_help": {
+    "message": "Escolha quais botões aparecerão em cada prompt"
+  },
+  "button_copy_prompt": {
+    "message": "Copiar Prompt"
+  },
+  "button_copy_ahk": {
+    "message": "Copiar URL AHK"
+  },
+  "button_automate_sap": {
+    "message": "Automatizar no SAP"
+  },
+  "button_edit": {
+    "message": "Editar"
+  },
+  "button_delete": {
+    "message": "Excluir"
+  },
+  "copy_prompt_title": {
+    "message": "Copiar prompt para área de transferência"
+  },
+  "prompt_copied_feedback": {
+    "message": "✅ Prompt copiado!"
+  },
+  "error_copying_prompt": {
+    "message": "Erro ao copiar prompt para área de transferência"
+  }
+}
