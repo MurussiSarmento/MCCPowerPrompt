@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mcc PromptFlow</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>mcc PromptFlow</h1>
+            <div class="search-container">
+                <input type="search" id="searchInput" placeholder="Buscar prompts...">
+            </div>
+            <div class="header-buttons">
+                <button id="addNewBtn" class="btn-primary">Adicionar Novo</button>
+                <button id="configBtn" class="btn-icon" title="Configurações">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <main>
+            <div id="promptsList" class="prompts-list">
+                <!-- Lista de prompts será renderizada aqui -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para adicionar/editar prompts -->
+    <div id="promptModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Adicionar Prompt</h2>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+            <form id="promptForm">
+                <div class="form-group">
+                    <label for="promptTitle">Título:</label>
+                    <input type="text" id="promptTitle" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="promptText">Texto:</label>
+                    <textarea id="promptText" name="text" rows="6" required placeholder="Digite seu prompt aqui. Use {{variavel}} para criar variáveis dinâmicas."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="promptTags">Tags:</label>
+                    <input type="text" id="promptTags" name="tags" placeholder="tag1, tag2, tag3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="promptCategory">Categoria:</label>
+                    <input type="text" id="promptCategory" name="category" placeholder="Ex: Desenvolvimento, Marketing, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="knowledgeBaseFiles">Arquivos de Knowledge Base:</label>
+                    <input type="file" id="knowledgeBaseFiles" name="knowledgeBaseFiles" multiple accept=".txt,.md,.csv,.json,.xml,.html,.htm,.css,.js,.py,.java,.c,.cpp,.h,.php,.rb,.pl,.sql,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.svg">
+                    <div class="form-help">Selecione arquivos para anexar ao prompt. Estes arquivos serão exportados junto com os prompts.</div>
+                    <div id="selectedFilesContainer" class="selected-files-container"></div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancelBtn" class="btn-secondary">Cancelar</button>
+                    <button type="submit" id="saveBtn" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de configurações -->
+    <div id="configModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurações</h2>
+                <button id="closeConfigModal" class="close-btn">&times;</button>
+            </div>
+            <form id="configForm">
+                <div class="form-group">
+                    <label for="sapGenAiUrl">URL do SAP Generative AI:</label>
+                    <input type="url" id="sapGenAiUrl" name="sapGenAiUrl" required>
+                    <div class="form-help">URL da plataforma SAP Generative AI para injeção de prompts</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="storageType">Tipo de Armazenamento:</label>
+                    <select id="storageType" name="storageType">
+                        <option value="local">Armazenamento Local (Chrome)</option>
+                    </select>
+                    <div class="form-help">Os prompts serão salvos no armazenamento local do navegador. Use as funções de exportar/importar para fazer backup.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Backup e Restauração:</label>
+                    <div class="backup-controls">
+                        <button type="button" id="exportPromptsBtn" class="btn-secondary">Exportar Prompts</button>
+                        <input type="file" id="importPromptsInput" accept=".json" style="display: none;">
+                        <button type="button" id="importPromptsBtn" class="btn-secondary">Importar Prompts</button>
+                    </div>
+                    <div class="form-help">Faça backup ou restaure seus prompts através de arquivo JSON</div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="resetConfigBtn" class="btn-secondary">Restaurar Padrão</button>
+                    <button type="submit" id="saveConfigBtn" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="jszip.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

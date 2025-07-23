@@ -1,0 +1,21 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0056b3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="8" cy="8" r="7" fill="url(#grad1)" stroke="#ffffff" stroke-width="0.5"/>
+  
+  <!-- Prompt icon (speech bubble with lines) -->
+  <g fill="white">
+    <!-- Speech bubble -->
+    <path d="M3 4 C3 3.5 3.5 3 4 3 L12 3 C12.5 3 13 3.5 13 4 L13 8 C13 8.5 12.5 9 12 9 L6 9 L4 11 L4 9 C3.5 9 3 8.5 3 8 Z" stroke="white" stroke-width="0.3" fill="white"/>
+    
+    <!-- Text lines -->
+    <rect x="5" y="5" width="6" height="0.8" rx="0.2" fill="#007bff"/>
+    <rect x="5" y="6.2" width="4" height="0.8" rx="0.2" fill="#007bff"/>
+  </g>
+</svg>

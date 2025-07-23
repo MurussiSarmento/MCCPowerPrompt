@@ -1,0 +1,1744 @@
+Erro na API File System Access: [object DOMException]
+Contexto
+popup/popup.html
+popup/popup.js:507 (chooseFolder)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807
+808
+809
+810
+811
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848
+849
+850
+851
+852
+853
+854
+855
+856
+857
+858
+859
+860
+861
+862
+863
+864
+865
+866
+867
+868
+869
+870
+// Elementos DOM
+const searchInput = document.getElementById('searchInput');
+const addNewBtn = document.getElementById('addNewBtn');
+const configBtn = document.getElementById('configBtn');
+const promptsList = document.getElementById('promptsList');
+const promptModal = document.getElementById('promptModal');
+const configModal = document.getElementById('configModal');
+const modalTitle = document.getElementById('modalTitle');
+const closeModal = document.getElementById('closeModal');
+const closeConfigModal = document.getElementById('closeConfigModal');
+const promptForm = document.getElementById('promptForm');
+const configForm = document.getElementById('configForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const resetConfigBtn = document.getElementById('resetConfigBtn');
+const storageTypeSelect = document.getElementById('storageType');
+const folderGroup = document.getElementById('folderGroup');
+const chooseFolderBtn = document.getElementById('chooseFolderBtn');
+const selectedFolderInput = document.getElementById('selectedFolder');
+const exportPromptsBtn = document.getElementById('exportPromptsBtn');
+const importPromptsBtn = document.getElementById('importPromptsBtn');
+const importPromptsInput = document.getElementById('importPromptsInput');
+
+// Estado da aplicação
+let prompts = [];
+let config = {};
+let editingPromptId = null;
+let folderHandle = null;
+
+// URL padrão do SAP Generative AI
+const DEFAULT_SAP_GENAI_URL = 'https://sapit-core-playground-vole.ai-launchpad.prod.eu-central-1.aws.apps.ml.hana.ondemand.com/aic/index.html#/generativeaihub?workspace=sap-genai-xl&resourceGroup=default&/g/promptchat';
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', async () => {
+    await Promise.all([
+        loadPrompts(),
+        loadConfig()
+    ]);
+    
+    renderPrompts();
+    setupEventListeners();
+    
+    // Verificar se foi chamado via protocolo AHK
+    checkProtocolAction();
+});
+
+// Carregar prompts do storage
+async function loadPrompts() {
+    try {
+        switch (config.storageType) {
+            case 'folder':
+                await loadPromptsFromFolder();
+                break;
+            default:
+                const result = await chrome.storage.local.get(['prompts']);
+                prompts = result.prompts || [];
+        }
+    } catch (error) {
+        console.error('Erro ao carregar prompts:', error);
+        prompts = [];
+    }
+}
+
+// Carregar configurações do storage
+async function loadConfig() {
+    try {
+        const result = await chrome.storage.local.get(['config']);
+        config = result.config || {};
+        
+        // Definir valores padrão se não existirem
+        if (!config.sapGenAiUrl) {
+            config.sapGenAiUrl = DEFAULT_SAP_GENAI_URL;
+        }
+        if (!config.storageType) {
+            config.storageType = 'local';
+        }
+        if (!config.folderSelected) {
+            config.folderSelected = false;
+        }
+        if (!config.selectedFolderName) {
+            config.selectedFolderName = '';
+        }
+        
+        // Atualizar interface com pasta selecionada
+        if (config.folderSelected && config.selectedFolderName && selectedFolderInput) {
+            selectedFolderInput.value = config.selectedFolderName;
+        }
+    } catch (error) {
+        console.error('Erro ao carregar configurações:', error);
+        config = { 
+            sapGenAiUrl: DEFAULT_SAP_GENAI_URL,
+            storageType: 'local',
+            folderSelected: false,
+            selectedFolderName: ''
+        };
+    }
+}
+
+// Salvar configurações
+async function saveConfig() {
+    try {
+        await chrome.storage.local.set({ config });
+        console.log('Configurações salvas:', config);
+    } catch (error) {
+        console.error('Erro ao salvar configurações:', error);
+    }
+}
+
+// Salvar prompts no storage
+async function savePrompts() {
+    try {
+        switch (config.storageType) {
+            case 'folder':
+                await savePromptsToFolder();
+                break;
+            default:
+                await chrome.storage.local.set({ prompts });
+        }
+    } catch (error) {
+        console.error('Erro ao salvar prompts:', error);
+    }
+}
+
+// Renderizar lista de prompts
+function renderPrompts(filteredPrompts = null) {
+    const promptsToRender = filteredPrompts || prompts;
+    
+    if (promptsToRender.length === 0) {
+        promptsList.innerHTML = `
+            <div class="empty-state">
+                <h3>Nenhum prompt encontrado</h3>
+                <p>${filteredPrompts ? 'Tente ajustar sua busca' : 'Comece adicionando seu primeiro prompt'}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    promptsList.innerHTML = promptsToRender.map(prompt => `
+        <div class="prompt-item" data-id="${prompt.id}">
+            <div class="prompt-header">
+                <h3 class="prompt-title">${escapeHtml(prompt.title)}</h3>
+                ${prompt.category ? `<span class="prompt-category">${escapeHtml(prompt.category)}</span>` : ''}
+            </div>
+            <div class="prompt-text">${escapeHtml(prompt.text)}</div>
+            ${prompt.tags && prompt.tags.length > 0 ? `
+                <div class="prompt-tags">
+                    ${prompt.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+            ` : ''}
+            <div class="prompt-actions">
+                <button class="btn-small btn-copy" data-id="${prompt.id}" data-action="copy" title="Copiar URL AHK">
+                    📋 URL AHK
+                </button>
+                <button class="btn-small btn-edit" data-id="${prompt.id}" data-action="edit" title="Editar">
+                    ✏️ Editar
+                </button>
+                <button class="btn-small btn-delete" data-id="${prompt.id}" data-action="delete" title="Excluir">
+                    🗑️ Excluir
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Configurar event listeners
+function setupEventListeners() {
+    // Busca em tempo real
+    searchInput.addEventListener('input', handleSearch);
+    
+    // Modal de prompts
+    addNewBtn.addEventListener('click', openAddModal);
+    closeModal.addEventListener('click', closeModalHandler);
+    cancelBtn.addEventListener('click', closeModalHandler);
+    promptForm.addEventListener('submit', handleFormSubmit);
+    
+    // Modal de configurações
+    configBtn.addEventListener('click', openConfigModal);
+    closeConfigModal.addEventListener('click', closeConfigModalHandler);
+    resetConfigBtn.addEventListener('click', resetConfig);
+    configForm.addEventListener('submit', handleConfigFormSubmit);
+    
+    // Configurações de armazenamento
+    storageTypeSelect.addEventListener('change', handleStorageTypeChange);
+    chooseFolderBtn.addEventListener('click', chooseFolder);
+    exportPromptsBtn.addEventListener('click', exportPrompts);
+    importPromptsBtn.addEventListener('click', () => importPromptsInput.click());
+    importPromptsInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            importPrompts(e.target.files[0]);
+            e.target.value = ''; // Reset input
+        }
+    });
+    
+    // Botão de ajuda para pasta
+    const folderHelpBtn = document.getElementById('folderHelpBtn');
+    const folderHelpText = document.getElementById('folderHelpText');
+    if (folderHelpBtn && folderHelpText) {
+        folderHelpBtn.addEventListener('click', () => {
+            // Toggle visibilidade do texto de ajuda
+            const isVisible = folderHelpText.style.display !== 'none';
+            folderHelpText.style.display = isVisible ? 'none' : 'block';
+        });
+    }
+    
+    // Delegação de eventos para botões de ação nos prompts
+    promptsList.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-action]');
+        if (!button) return;
+        
+        const action = button.getAttribute('data-action');
+        const id = button.getAttribute('data-id');
+        
+        if (!id) return;
+        
+        switch (action) {
+            case 'copy':
+                copyAhkUrl(id);
+                break;
+            case 'edit':
+                editPrompt(id);
+                break;
+            case 'delete':
+                deletePrompt(id);
+                break;
+        }
+    });
+    
+    // Fechar modais clicando fora
+    promptModal.addEventListener('click', (e) => {
+        if (e.target === promptModal) {
+            closeModalHandler();
+        }
+    });
+    
+    configModal.addEventListener('click', (e) => {
+        if (e.target === configModal) {
+            closeConfigModalHandler();
+        }
+    });
+    
+    // Esc para fechar modais
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (!promptModal.classList.contains('hidden')) {
+                closeModalHandler();
+            } else if (!configModal.classList.contains('hidden')) {
+                closeConfigModalHandler();
+            }
+        }
+    });
+}
+
+// Busca em tempo real
+function handleSearch() {
+    const query = searchInput.value.toLowerCase().trim();
+    
+    if (!query) {
+        renderPrompts();
+        return;
+    }
+    
+    const filteredPrompts = prompts.filter(prompt => {
+        return (
+            prompt.title.toLowerCase().includes(query) ||
+            prompt.text.toLowerCase().includes(query) ||
+            prompt.category?.toLowerCase().includes(query) ||
+            prompt.tags?.some(tag => tag.toLowerCase().includes(query))
+        );
+    });
+    
+    renderPrompts(filteredPrompts);
+}
+
+// Abrir modal para adicionar
+function openAddModal() {
+    editingPromptId = null;
+    modalTitle.textContent = 'Adicionar Prompt';
+    promptForm.reset();
+    promptModal.classList.remove('hidden');
+    document.getElementById('promptTitle').focus();
+}
+
+// Abrir modal para editar
+function editPrompt(id) {
+    const prompt = prompts.find(p => p.id === id);
+    if (!prompt) return;
+    
+    editingPromptId = id;
+    modalTitle.textContent = 'Editar Prompt';
+    
+    document.getElementById('promptTitle').value = prompt.title;
+    document.getElementById('promptText').value = prompt.text;
+    document.getElementById('promptTags').value = prompt.tags ? prompt.tags.join(', ') : '';
+    document.getElementById('promptCategory').value = prompt.category || '';
+    
+    promptModal.classList.remove('hidden');
+    document.getElementById('promptTitle').focus();
+}
+
+// Fechar modal de prompts
+function closeModalHandler() {
+    promptModal.classList.add('hidden');
+    editingPromptId = null;
+    promptForm.reset();
+}
+
+// Abrir modal de configurações
+function openConfigModal() {
+    // Preencher formulário com valores atuais
+    document.getElementById('sapGenAiUrl').value = config.sapGenAiUrl || '';
+    storageTypeSelect.value = config.storageType || 'local';
+    
+    // Atualizar interface baseada no tipo de armazenamento
+    handleStorageTypeChange();
+    
+    // Mostrar modal
+    configModal.classList.remove('hidden');
+}
+
+// Fechar modal de configurações
+function closeConfigModalHandler() {
+    configModal.classList.add('hidden');
+    configForm.reset();
+}
+
+// Resetar configurações para valores padrão
+async function resetConfig() {
+    document.getElementById('sapGenAiUrl').value = DEFAULT_SAP_GENAI_URL;
+    storageTypeSelect.value = 'local';
+    selectedFolderInput.value = '';
+    
+    // Resetar configurações no objeto
+    config.sapGenAiUrl = DEFAULT_SAP_GENAI_URL;
+    config.storageType = 'local';
+    config.folderSelected = false;
+    config.selectedFolderName = '';
+    
+    // Resetar estado
+    folderHandle = null;
+    
+    await saveConfig();
+    handleStorageTypeChange();
+    
+    alert('Configurações restauradas para o padrão!');
+}
+
+// Submeter formulário de configurações
+async function handleConfigFormSubmit(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(configForm);
+    const sapGenAiUrl = formData.get('sapGenAiUrl').trim();
+    const storageType = formData.get('storageType');
+    
+    // Verificar se escolheu pasta mas não selecionou nenhuma
+    if (storageType === 'folder') {
+        if (!config.folderSelected) {
+            alert('Você selecionou o armazenamento em pasta, mas não escolheu nenhuma pasta. Por favor, clique em "Escolher Pasta" para selecionar uma pasta ou escolha outro tipo de armazenamento.');
+            return;
+        }
+        
+        // Verificar se a pasta foi selecionada mas o folderHandle não está disponível (após reiniciar a extensão)
+        if (!folderHandle && config.folderSelected) {
+            alert('Devido a limitações de segurança do Chrome, você precisa selecionar a pasta novamente após reiniciar a extensão. Por favor, clique em "Escolher Pasta" para selecionar a pasta novamente.');
+            return;
+        }
+    }
+    
+    // Atualizar configurações
+    config.sapGenAiUrl = sapGenAiUrl || DEFAULT_SAP_GENAI_URL;
+    config.storageType = storageType;
+    
+    // Manter informações da pasta se já selecionada
+    if (config.storageType !== 'folder') {
+        config.folderSelected = false;
+        config.selectedFolderName = '';
+    }
+    
+    try {
+        // Salvar configurações
+        await saveConfig();
+        
+        // Notificar background script sobre mudança de configuração
+        chrome.runtime.sendMessage({ action: 'configUpdated' });
+        
+        closeConfigModal();
+        alert('Configurações salvas com sucesso!');
+    } catch (error) {
+        console.error('Erro ao salvar configurações:', error);
+        alert('Erro ao salvar configurações: ' + error.message);
+    }
+}
+
+// Gerenciar mudança no tipo de armazenamento
+function handleStorageTypeChange() {
+    const storageType = storageTypeSelect.value;
+    
+    // Ocultar todos os grupos
+    folderGroup.style.display = 'none';
+    
+    // Mostrar grupo relevante
+    if (storageType === 'folder') {
+        folderGroup.style.display = 'block';
+        
+        // Mostrar nome da pasta se estiver configurada
+        if (config.selectedFolderName) {
+            selectedFolderInput.value = config.selectedFolderName;
+            
+            // Se temos nome de pasta mas não temos folderHandle, mostrar mensagem informativa
+            if (!folderHandle && config.folderSelected) {
+                // Adicionar classe visual para indicar que precisa selecionar novamente
+                selectedFolderInput.classList.add('folder-needs-reselection');
+                selectedFolderInput.value = config.selectedFolderName + ' (selecione novamente)';
+            } else {
+                selectedFolderInput.classList.remove('folder-needs-reselection');
+            }
+        } else {
+            selectedFolderInput.classList.remove('folder-needs-reselection');
+            selectedFolderInput.value = '';
+        }
+    }
+}
+
+// Escolher pasta para armazenamento
+async function chooseFolder() {
+    try {
+        // Verificar se a API está disponível
+        if (!('showDirectoryPicker' in window)) {
+            throw new Error('Seu navegador não suporta a API de seleção de pasta. Use a opção de exportar/importar manualmente.');
+        }
+        
+        console.log('Iniciando seleção de pasta...');
+        
+        try {
+            // A API File System Access não requer permissão específica em extensões
+            // O showDirectoryPicker solicitará permissão do usuário automaticamente
+            console.log('Solicitando seleção de pasta...');
+            folderHandle = await window.showDirectoryPicker();
+            
+            console.log('Pasta selecionada:', folderHandle.name);
+            
+            // Verificar permissão de escrita explicitamente
+            try {
+                console.log('Solicitando permissão de escrita...');
+                const permissionStatus = await folderHandle.requestPermission({ mode: 'readwrite' });
+                
+                console.log('Status da permissão:', permissionStatus);
+                if (permissionStatus !== 'granted') {
+                    throw new Error('Permissão de acesso à pasta negada pelo usuário');
+                }
+            } catch (permError) {
+                console.warn('Erro ao verificar permissão específica:', permError);
+                // Continuar mesmo com erro de permissão, tentaremos verificar com um teste de escrita
+            }
+            
+            // Atualizar UI
+            config.selectedFolderName = folderHandle.name;
+            selectedFolderInput.value = folderHandle.name;
+            
+            // Salvar informação sobre pasta selecionada
+            config.folderSelected = true;
+            
+            // Tentar criar um arquivo de teste para verificar acesso
+            console.log('Testando acesso de escrita...');
+            try {
+                const testFileName = 'promptflow-test-' + Date.now() + '.txt';
+                
+                // Tentar obter um handle para o arquivo de teste
+                console.log('Criando arquivo de teste:', testFileName);
+                const testFileHandle = await folderHandle.getFileHandle(testFileName, { create: true });
+                
+                // Criar um WritableStream e escrever o conteúdo
+                console.log('Obtendo stream de escrita...');
+                const writable = await testFileHandle.createWritable();
+                console.log('Escrevendo conteúdo de teste...');
+                await writable.write('Teste de acesso - PromptFlow');
+                console.log('Fechando stream...');
+                await writable.close();
+                
+                console.log('Arquivo de teste criado com sucesso');
+                
+                // Remover arquivo de teste
+                console.log('Removendo arquivo de teste...');
+                await folderHandle.removeEntry(testFileName);
+                console.log('Arquivo de teste removido com sucesso');
+                
+                // Salvar configuração após confirmar acesso
+                console.log('Salvando configuração...');
+                await saveConfig();
+                alert('Pasta selecionada com sucesso: ' + folderHandle.name);
+            } catch (accessError) {
+                console.error('Erro ao testar acesso de escrita:', accessError);
+                
+                // Mensagem de erro mais detalhada e amigável
+                let errorMsg = 'Não foi possível escrever na pasta selecionada. ';
+                
+                if (accessError.name === 'NotAllowedError' || accessError.message.includes('permission')) {
+                    errorMsg += 'O navegador negou permissão de escrita. Por favor, tente selecionar a pasta novamente e conceda todas as permissões solicitadas.';
+                } else if (accessError.name === 'SecurityError') {
+                    errorMsg += 'Erro de segurança ao acessar a pasta. Verifique se você está usando HTTPS ou localhost.';
+                } else {
+                    errorMsg += 'Verifique as permissões e tente novamente. Detalhes técnicos: ' + accessError.message;
+                }
+                
+                throw new Error(errorMsg);
+            }
+        } catch (apiError) {
+            console.error('Erro na API File System Access:', apiError);
+            throw apiError;
+        }
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            console.log('Seleção de pasta cancelada pelo usuário');
+            return; // Usuário cancelou, não mostrar erro
+        }
+        
+        console.error('Erro ao escolher pasta:', error);
+        alert('Erro ao escolher pasta: ' + error.message);
+        
+        // Resetar estado em caso de erro
+        config.folderSelected = false;
+        config.selectedFolderName = '';
+        selectedFolderInput.value = '';
+        folderHandle = null;
+        await saveConfig();
+    }
+}
+
+
+
+// Carregar prompts de pasta local
+async function loadPromptsFromFolder() {
+    try {
+        // Verificar se temos um handle de pasta válido
+        if (!folderHandle && config.folderSelected) {
+            // Informar ao usuário que precisa selecionar a pasta novamente
+            console.warn('Pasta não acessível. Selecione a pasta novamente.');
+            
+            // Não mostrar alerta na inicialização, apenas um log
+            console.log('A pasta selecionada não está mais acessível devido a limitações de segurança do Chrome. O usuário precisará selecionar a pasta novamente nas configurações.');
+            
+            // Não resetar para storage local automaticamente, apenas usar como fallback temporário
+            // Manter config.storageType como 'folder' para que o usuário possa selecionar a pasta novamente
+            
+            // Carregar do storage local como fallback
+            const result = await chrome.storage.local.get(['prompts']);
+            prompts = result.prompts || [];
+            return;
+        }
+        
+        if (folderHandle) {
+            try {
+                console.log('Tentando acessar pasta:', config.selectedFolderName);
+                
+                // Verificar permissão antes de tentar acessar
+                try {
+                    console.log('Solicitando permissão de acesso à pasta...');
+                    const permissionStatus = await folderHandle.requestPermission({ mode: 'readwrite' });
+                    console.log('Status da permissão:', permissionStatus);
+                    
+                    if (permissionStatus !== 'granted') {
+                        throw new Error('Permissão de acesso à pasta negada pelo usuário');
+                    }
+                } catch (permError) {
+                    console.warn('Erro ao verificar permissão específica:', permError);
+                    // Continuar mesmo com erro de permissão, tentaremos acessar o arquivo diretamente
+                }
+                
+                // Tentar abrir o arquivo de prompts
+                console.log('Tentando abrir arquivo prompts.json...');
+                try {
+                    const fileHandle = await folderHandle.getFileHandle('prompts.json');
+                    const file = await fileHandle.getFile();
+                    const text = await file.text();
+                    console.log('Arquivo prompts.json lido com sucesso');
+                    
+                    try {
+                        const loadedPrompts = JSON.parse(text);
+                        if (Array.isArray(loadedPrompts)) {
+                            prompts = loadedPrompts;
+                            console.log('Prompts carregados com sucesso da pasta:', config.selectedFolderName);
+                        } else {
+                            throw new Error('Formato de arquivo inválido - não é um array');
+                        }
+                    } catch (parseError) {
+                        console.error('Erro ao analisar arquivo JSON:', parseError);
+                        throw new Error('O arquivo prompts.json está corrompido ou em formato inválido. Detalhes: ' + parseError.message);
+                    }
+                } catch (fileError) {
+                    if (fileError.name === 'NotFoundError') {
+                        // Arquivo não existe ainda, usar array vazio
+                        console.log('Arquivo prompts.json não encontrado, usando lista vazia');
+                        prompts = [];
+                        
+                        // Tentar criar o arquivo para verificar permissões
+                        try {
+                            console.log('Tentando criar arquivo prompts.json inicial...');
+                            const newFileHandle = await folderHandle.getFileHandle('prompts.json', { create: true });
+                            const writable = await newFileHandle.createWritable();
+                            await writable.write(JSON.stringify([]));
+                            await writable.close();
+                            console.log('Arquivo prompts.json inicial criado com sucesso');
+                        } catch (createError) {
+                            console.error('Erro ao criar arquivo inicial:', createError);
+                            throw new Error('Não foi possível criar o arquivo prompts.json. Verifique as permissões da pasta. Detalhes: ' + createError.message);
+                        }
+                    } else {
+                        console.error('Erro ao acessar arquivo:', fileError);
+                        throw fileError;
+                    }
+                }
+            } catch (accessError) {
+                console.error('Erro de acesso à pasta:', accessError);
+                
+                // Verificar se é um erro de permissão
+                if (accessError.name === 'SecurityError' || accessError.message.includes('permission')) {
+                    throw new Error('Erro de permissão ao acessar a pasta. Por favor, selecione a pasta novamente nas configurações. Detalhes: ' + accessError.message);
+                }
+                
+                throw accessError;
+            }
+        } else {
+            // Sem folderHandle, usar array vazio
+            console.log('Nenhuma pasta selecionada, usando lista vazia');
+            prompts = [];
+        }
+    } catch (error) {
+        console.error('Erro ao carregar prompts da pasta:', error);
+        
+        // Apenas registrar o erro no console, sem mostrar alerta ao usuário
+        console.log('Usando armazenamento local como fallback temporário, mantendo o tipo de armazenamento como "folder"');
+        
+        // Não alterar o tipo de armazenamento, apenas usar o local como fallback
+        // Isso permite que o usuário tente selecionar a pasta novamente
+        
+        // Fallback para storage local
+        const result = await chrome.storage.local.get(['prompts']);
+        prompts = result.prompts || [];
+    }
+}
+
+// Salvar prompts em pasta local
+async function savePromptsToFolder() {
+    try {
+        if (!folderHandle) {
+            throw new Error('Nenhuma pasta selecionada');
+        }
+        
+        // Verificar permissão antes de tentar acessar
+        try {
+            console.log('Verificando permissão para salvar na pasta...');
+            const permissionStatus = await folderHandle.requestPermission({ mode: 'readwrite' });
+            
+            if (permissionStatus !== 'granted') {
+                throw new Error('Permissão de acesso à pasta negada pelo usuário');
+            }
+        } catch (permError) {
+            console.warn('Erro ao verificar permissão específica:', permError);
+            // Continuar mesmo com erro de permissão, tentaremos salvar diretamente
+        }
+        
+        console.log('Tentando salvar arquivo prompts.json...');
+        try {
+            const fileHandle = await folderHandle.getFileHandle('prompts.json', { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(JSON.stringify(prompts, null, 2));
+            await writable.close();
+            
+            console.log('Prompts salvos com sucesso na pasta:', config.selectedFolderName);
+        } catch (fileError) {
+            console.error('Erro ao manipular arquivo:', fileError);
+            throw new Error('Não foi possível salvar o arquivo prompts.json. Detalhes: ' + fileError.message);
+        }
+    } catch (error) {
+        console.error('Erro ao salvar prompts na pasta:', error);
+        
+        // Mostrar mensagem de erro ao usuário
+        alert('Erro ao salvar prompts na pasta: ' + error.message + '\nSalvando no armazenamento local como fallback.');
+        
+        // Fallback para storage local
+        await chrome.storage.local.set({ prompts });
+        
+        // Não alterar automaticamente o tipo de armazenamento, mesmo com erro de permissão
+        // Isso permite que o usuário tente selecionar a pasta novamente
+        if (error.name === 'SecurityError' || error.message.includes('permission') || error.message.includes('Permissão')) {
+            console.log('Erro de permissão ao salvar na pasta, mas mantendo o tipo de armazenamento como "folder"');
+        }
+        
+        throw error;
+    }
+}
+
+// Exportar prompts para download
+function exportPrompts() {
+    const dataStr = JSON.stringify(prompts, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'prompts.json';
+    a.click();
+    
+    URL.revokeObjectURL(url);
+}
+
+// Importar prompts de arquivo
+function importPrompts(file) {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const importedPrompts = JSON.parse(e.target.result);
+            
+            // Mesclar com prompts existentes (evitar duplicatas por ID)
+            const existingIds = new Set(prompts.map(p => p.id));
+            const newPrompts = importedPrompts.filter(p => !existingIds.has(p.id));
+            
+            prompts = [...prompts, ...newPrompts];
+            await savePrompts();
+            renderPrompts();
+            
+            alert(`${newPrompts.length} prompts importados com sucesso!`);
+        } catch (error) {
+            console.error('Erro ao importar prompts:', error);
+            alert('Erro ao importar prompts: ' + error.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Submeter formulário
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(promptForm);
+    const title = formData.get('title').trim();
+    const text = formData.get('text').trim();
+    const tagsString = formData.get('tags').trim();
+    const category = formData.get('category').trim();
+    
+    if (!title || !text) {
+        alert('Título e texto são obrigatórios!');
+        return;
+    }
+    
+    const tags = tagsString ? tagsString.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+    
+    const promptData = {
+        title,
+        text,
+        tags,
+        category: category || null
+    };
+    
+    if (editingPromptId) {
+        // Editar prompt existente
+        const index = prompts.findIndex(p => p.id === editingPromptId);
+        if (index !== -1) {
+            prompts[index] = { ...prompts[index], ...promptData };
+        }
+    } else {
+        // Criar novo prompt
+        const newPrompt = {
+            id: crypto.randomUUID(),
+            ...promptData
+        };
+        prompts.push(newPrompt);
+    }
+    
+    await savePrompts();
+    renderPrompts();
+    closeModalHandler();
+    
+    // Limpar busca se houver
+    if (searchInput.value) {
+        searchInput.value = '';
+        handleSearch();
+    }
+}
+
+// Excluir prompt
+async function deletePrompt(id) {
+    if (!confirm('Tem certeza que deseja excluir este prompt?')) {
+        return;
+    }
+    
+    prompts = prompts.filter(p => p.id !== id);
+    await savePrompts();
+    renderPrompts();
+    
+    // Atualizar busca se houver
+    if (searchInput.value) {
+        handleSearch();
+    }
+}
+
+// Copiar código AHK para clipboard
+async function copyAhkUrl(id) {
+    // Criar código AHK que usa chrome.runtime.sendMessage para comunicação externa
+    const extensionId = chrome.runtime.id;
+    const ahkCode = `
+; Código AHK para mcc PromptFlow
+; ID do prompt: ${id}
+
+#SingleInstance Force
+
+F1::
+    ; Usar comunicação externa com a extensão Chrome
+    Run, chrome.exe --app="javascript:window.opener=null; window.open('', '_self'); window.close(); chrome.runtime.sendMessage('${extensionId}', {action: 'insertPrompt', promptId: '${id}'}, function(response) { if (response && response.success) { console.log('Prompt enviado com sucesso'); } else { console.error('Erro ao enviar prompt'); } });"
+    return
+`;
+    
+    try {
+        await navigator.clipboard.writeText(ahkCode);
+        
+        // Feedback visual
+        const button = document.querySelector(`.btn-copy[data-id="${id}"]`);
+        if (button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '✅ Copiado!';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Erro ao copiar código AHK:', error);
+        alert('Erro ao copiar código AHK para o clipboard');
+    }
+}
+
+// Verificar se foi chamado via parâmetros de URL
+function checkProtocolAction() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    const promptId = urlParams.get('id');
+    
+    if (action === 'insert' && promptId) {
+        // Enviar mensagem para background.js para iniciar injeção
+        chrome.runtime.sendMessage({
+            action: 'injectFromExternal',
+            promptId: promptId
+        }).catch(error => {
+            console.error('Erro ao enviar mensagem para background:', error);
+        });
+        
+        // Fechar popup após enviar comando
+        setTimeout(() => {
+            window.close();
+        }, 100);
+    }
+}
+
+// Função utilitária para escapar HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Tornar funções globais para uso nos event handlers inline
+try {
+    window.editPrompt = editPrompt;
+    window.deletePrompt = deletePrompt;
+    window.copyAhkUrl = copyAhkUrl;
+    console.log('Funções globais registradas com sucesso');
+} catch (error) {
+    console.error('Erro ao registrar funções globais:', error);
+}
