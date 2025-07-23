@@ -254,6 +254,27 @@ function setupMessageListener() {
                 sendResponse({ success: true, status: 'ready' });
                 break;
                 
+            case 'automatePrompt':
+                // Verificar se estamos na página do SAP Generative AI
+                console.log('Content script recebeu solicitação de automação');
+                
+                // Verificar se o script de automação está disponível
+                if (typeof window.automatePromptUsage === 'function') {
+                    console.log('Função automatePromptUsage encontrada, chamando diretamente');
+                    // Se a função está disponível, chamar diretamente
+                    window.automatePromptUsage(message.promptId)
+                        .then(result => sendResponse(result))
+                        .catch(error => sendResponse({ success: false, error: error.message }));
+                } else {
+                    console.warn('Função automatePromptUsage não encontrada');
+                    // Informar que o script de automação não está disponível
+                    sendResponse({ 
+                        success: false, 
+                        error: 'Script de automação não carregado. Por favor, tente novamente.' 
+                    });
+                }
+                break;
+                
             default:
                 console.warn('Ação não reconhecida:', message.action);
                 sendResponse({ success: false, error: 'Ação não reconhecida' });

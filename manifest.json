@@ -3,7 +3,7 @@
   "name": "mcc PromptFlow",
   "version": "1.0",
   "description": "Repositório de prompts com integração AHK.",
-  "permissions": ["storage", "activeTab", "scripting", "downloads", "fileSystemWrite"],
+  "permissions": ["storage", "activeTab", "scripting", "downloads"],
   "host_permissions": [
     "https://chat.openai.com/*",
     "https://gemini.google.com/*",

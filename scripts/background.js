@@ -101,11 +101,39 @@ async function handleAutomatePrompt(promptId, sendResponse) {
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
         
-        // 3. Injetar script de automação
-        await chrome.scripting.executeScript({
-            target: { tabId: sapTab.id },
-            files: ['scripts/sapai-automation.js']
-        });
+        // 3. Verificar se o script já foi injetado e injetar apenas se necessário
+        try {
+            // Primeiro, verificar se o script já foi injetado
+            const checkResult = await chrome.scripting.executeScript({
+                target: { tabId: sapTab.id },
+                func: () => window.sapAutomationScriptInjected === true
+            });
+            
+            const scriptAlreadyInjected = checkResult[0]?.result === true;
+            
+            if (!scriptAlreadyInjected) {
+                console.log('Injetando script de automação...');
+                await chrome.scripting.executeScript({
+                    target: { tabId: sapTab.id },
+                    files: ['scripts/sapai-automation.js']
+                });
+                
+                // Marcar o script como injetado
+                await chrome.scripting.executeScript({
+                    target: { tabId: sapTab.id },
+                    func: () => { window.sapAutomationScriptInjected = true; }
+                });
+            } else {
+                console.log('Script de automação já injetado, pulando injeção');
+            }
+        } catch (error) {
+            console.error('Erro ao verificar/injetar script:', error);
+            // Em caso de erro, tentar injetar o script de qualquer forma
+            await chrome.scripting.executeScript({
+                target: { tabId: sapTab.id },
+                files: ['scripts/sapai-automation.js']
+            });
+        }
         
         // 4. Aguardar um pouco para o script carregar
         await new Promise(resolve => setTimeout(resolve, 500));

@@ -240,6 +240,15 @@ header h1 {
   background-color: #1e7e34;
 }
 
+.btn-automate {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.btn-automate:hover {
+  background-color: #5a32a3;
+}
+
 .btn-edit {
   background-color: var(--warning-color);
   color: #212529;

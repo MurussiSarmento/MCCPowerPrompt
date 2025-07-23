@@ -123,6 +123,9 @@ function renderPrompts(filteredPrompts = null) {
                 <button class="btn-small btn-copy" data-id="${prompt.id}" data-action="copy" title="Copiar URL AHK">
                     📋 URL AHK
                 </button>
+                <button class="btn-small btn-automate" data-id="${prompt.id}" data-action="automate" title="Automatizar no SAP Generative AI">
+                    🤖 Automatizar
+                </button>
                 <button class="btn-small btn-edit" data-id="${prompt.id}" data-action="edit" title="Editar">
                     ✏️ Editar
                 </button>
@@ -193,6 +196,9 @@ function setupEventListeners() {
         switch (action) {
             case 'copy':
                 copyAhkUrl(id);
+                break;
+            case 'automate':
+                automatePrompt(id);
                 break;
             case 'edit':
                 editPrompt(id);
@@ -688,17 +694,26 @@ async function deletePrompt(id) {
 
 // Copiar código AHK para clipboard
 async function copyAhkUrl(id) {
-    // Criar código AHK que usa chrome.runtime.sendMessage para comunicação externa
+    // Obter ID da extensão
     const extensionId = chrome.runtime.id;
+    
+    // Código AHK
     const ahkCode = `
-; Código AHK para mcc PromptFlow
+; Código para injetar prompt via AHK
 ; ID do prompt: ${id}
 
 #SingleInstance Force
 
+; Opção 1: Injetar prompt diretamente (F1)
 F1::
     ; Usar comunicação externa com a extensão Chrome
     Run, chrome.exe --app="javascript:window.opener=null; window.open('', '_self'); window.close(); chrome.runtime.sendMessage('${extensionId}', {action: 'insertPrompt', promptId: '${id}'}, function(response) { if (response && response.success) { console.log('Prompt enviado com sucesso'); } else { console.error('Erro ao enviar prompt'); } });"
+    return
+
+; Opção 2: Automatizar no SAP Generative AI (F2)
+F2::
+    ; Automatizar prompt no SAP Generative AI
+    Run, chrome.exe --app="javascript:window.opener=null; window.open('', '_self'); window.close(); chrome.runtime.sendMessage('${extensionId}', {action: 'automatePrompt', promptId: '${id}'}, function(response) { if (response && response.success) { console.log('Automação iniciada com sucesso'); } else { console.error('Erro ao automatizar prompt'); } });"
     return
 `;
     
@@ -752,11 +767,48 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Função para automatizar prompt no SAP Generative AI
+async function automatePrompt(id) {
+    try {
+        // Enviar mensagem para background.js para iniciar automação
+        const response = await chrome.runtime.sendMessage({
+            action: 'automatePrompt',
+            promptId: id
+        });
+        
+        if (response && response.success) {
+            // Feedback visual
+            const button = document.querySelector(`.btn-automate[data-id="${id}"]`);
+            if (button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Iniciado!';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, 2000);
+            }
+            
+            // Fechar popup após enviar comando
+            setTimeout(() => {
+                window.close();
+            }, 500);
+        } else {
+            alert('Erro ao automatizar prompt: ' + (response?.error || 'Erro desconhecido'));
+        }
+    } catch (error) {
+        console.error('Erro ao automatizar prompt:', error);
+        alert('Erro ao automatizar prompt: ' + error.message);
+    }
+}
+
 // Tornar funções globais para uso nos event handlers inline
 try {
     window.editPrompt = editPrompt;
     window.deletePrompt = deletePrompt;
     window.copyAhkUrl = copyAhkUrl;
+    window.automatePrompt = automatePrompt;
     console.log('Funções globais registradas com sucesso');
 } catch (error) {
     console.error('Erro ao registrar funções globais:', error);
